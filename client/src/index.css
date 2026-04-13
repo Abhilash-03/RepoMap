@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+/* Base styling overrides */
+body {
+  background-color: #f8fafc;
+  color: #1e293b;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* React Flow custom styles */
+.react-flow__node {
+  padding: 0;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+}
