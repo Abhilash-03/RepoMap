@@ -28,7 +28,7 @@ function parseGitHubUrl(url: string): { owner: string; repo: string } | null {
 // POST /api/analyze
 router.post('/analyze', async (req: Request, res: Response) => {
   try {
-    const { repoUrl } = req.body;
+    const { repoUrl, githubToken } = req.body;
 
     if (!repoUrl) {
       res.status(400).json({ error: 'Repository URL is required' });
@@ -44,8 +44,8 @@ router.post('/analyze', async (req: Request, res: Response) => {
 
     console.log(`📦 Analyzing repository: ${repoInfo.owner}/${repoInfo.repo}`);
 
-    // Fetch files from GitHub
-    const githubService = new GitHubService();
+    // Fetch files from GitHub (with optional user token)
+    const githubService = new GitHubService(githubToken);
     const files = await githubService.fetchRepoFiles(repoInfo.owner, repoInfo.repo);
 
     console.log(`📁 Found ${files.length} JS/TS files`);
@@ -76,9 +76,13 @@ router.post('/analyze', async (req: Request, res: Response) => {
       entryPoints,
       nodes,
       edges,
+      rateLimit: githubService.rateLimit,
     };
 
     console.log(`✅ Analysis complete: ${orphanFiles.length} orphan files found`);
+    if (githubService.rateLimit) {
+      console.log(`📊 Rate limit: ${githubService.rateLimit.remaining}/${githubService.rateLimit.limit} remaining`);
+    }
 
     res.json(result);
   } catch (error) {
