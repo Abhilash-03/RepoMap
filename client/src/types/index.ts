@@ -35,6 +35,12 @@ export interface GraphEdge {
   style?: Record<string, string | number>;
 }
 
+export interface RateLimitInfo {
+  limit: number;
+  remaining: number;
+  reset: Date;
+}
+
 export interface AnalysisResult {
   repoInfo: RepoInfo;
   totalFiles: number;
@@ -44,4 +50,5 @@ export interface AnalysisResult {
   entryPoints: string[];
   nodes: GraphNode[];
   edges: GraphEdge[];
+  rateLimit: RateLimitInfo | null;
 }
