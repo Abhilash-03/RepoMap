@@ -1,9 +1,10 @@
-import { FileWarning, CheckCircle2, AlertTriangle, ChevronRight } from 'lucide-react';
+import { FileWarning, CheckCircle2, AlertTriangle, ChevronRight, Info } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
+import type { FileDependency } from '@/types';
 
 interface OrphanFilesProps {
-  orphanFiles: string[];
+  orphanFiles: FileDependency[];
   onFileClick?: (filePath: string) => void;
 }
 
@@ -41,15 +42,15 @@ export default function OrphanFiles({ orphanFiles, onFileClick }: OrphanFilesPro
 
       <ScrollArea className="h-[400px] pr-4">
         <ul className="space-y-2">
-          {orphanFiles.map((file, index) => {
-            const fileName = file.split('/').pop() || file;
-            const directory = file.split('/').slice(0, -1).join('/');
+          {orphanFiles.map((dep, index) => {
+            const fileName = dep.path.split('/').pop() || dep.path;
+            const directory = dep.path.split('/').slice(0, -1).join('/');
             
             return (
               <li 
-                key={file}
+                key={dep.path}
                 className="group flex items-center gap-3 px-4 py-3 bg-slate-50 hover:bg-red-50 border border-slate-200 hover:border-red-200 rounded-lg cursor-pointer transition-all"
-                onClick={() => onFileClick?.(file)}
+                onClick={() => onFileClick?.(dep.path)}
               >
                 <div className="h-8 w-8 rounded bg-red-100 flex items-center justify-center flex-shrink-0">
                   <FileWarning className="h-4 w-4 text-red-600" />
@@ -58,6 +59,12 @@ export default function OrphanFiles({ orphanFiles, onFileClick }: OrphanFilesPro
                   <p className="font-medium text-slate-800 truncate">{fileName}</p>
                   {directory && (
                     <p className="text-xs text-slate-500 truncate">{directory}/</p>
+                  )}
+                  {dep.statusReason && (
+                    <p className="text-xs text-red-500 mt-1 flex items-center gap-1">
+                      <Info className="h-3 w-3" />
+                      {dep.statusReason}
+                    </p>
                   )}
                 </div>
                 <Badge variant="outline" className="text-xs hidden sm:flex">

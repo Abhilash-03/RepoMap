@@ -2,14 +2,34 @@ import { RepoFile, FileDependency, ImportInfo } from '../types/index.js';
 import path from 'path';
 
 export class DependencyAnalyzer {
-  // Common entry point patterns
+  // Common entry point patterns - files that are typically referenced externally
   private readonly ENTRY_PATTERNS = [
-    /^index\.(js|jsx|ts|tsx|mjs)$/,
-    /^main\.(js|jsx|ts|tsx|mjs)$/,
-    /^app\.(js|jsx|ts|tsx|mjs)$/,
-    /^src\/index\.(js|jsx|ts|tsx|mjs)$/,
-    /^src\/main\.(js|jsx|ts|tsx|mjs)$/,
-    /^src\/App\.(js|jsx|ts|tsx|mjs)$/,
+    // Standard entry points
+    /^index\.(js|jsx|ts|tsx|mjs)$/i,
+    /^main\.(js|jsx|ts|tsx|mjs)$/i,
+    /^app\.(js|jsx|ts|tsx|mjs)$/i,
+    /^script\.(js|jsx|ts|tsx|mjs)$/i,
+    // src folder entry points
+    /^src\/index\.(js|jsx|ts|tsx|mjs)$/i,
+    /^src\/main\.(js|jsx|ts|tsx|mjs)$/i,
+    /^src\/App\.(js|jsx|ts|tsx|mjs)$/i,
+    // Server entry points
+    /^server\.(js|ts|mjs)$/i,
+    /^server\/index\.(js|ts|mjs)$/i,
+    // CLI/bin entry points
+    /^bin\//i,
+    /^cli\.(js|ts|mjs)$/i,
+  ];
+
+  // Directories where files are typically served directly (not imported)
+  private readonly STATIC_DIRS = [
+    'public',
+    'static',
+    'assets',
+    'dist',
+    'build',
+    'www',
+    'web',
   ];
 
   // Analyze all files and build dependency map
@@ -47,20 +67,116 @@ export class DependencyAnalyzer {
       }
     }
 
-    // Determine orphan status
+    // Determine orphan status with smarter detection and explanation
     for (const dep of dependencyMap.values()) {
-      // A file is orphan if:
-      // 1. It's not imported by any other file
-      // 2. It's not an entry point
-      // 3. It's not a test/spec file
-      // 4. It's not a config file
-      dep.isOrphan = dep.importedBy.length === 0 && 
-                     !dep.isEntryPoint && 
-                     !this.isTestFile(dep.path) &&
-                     !this.isConfigFile(dep.path);
+      const status = this.getOrphanStatus(dep);
+      dep.isOrphan = status.isOrphan;
+      dep.statusReason = status.reason;
     }
 
     return Array.from(dependencyMap.values());
+  }
+
+  // Smart orphan detection with reason - returns status and explanation
+  private getOrphanStatus(dep: FileDependency): { isOrphan: boolean; reason: string } {
+    // If it's imported by other files, NOT orphan
+    if (dep.importedBy.length > 0) {
+      return { isOrphan: false, reason: `Imported by ${dep.importedBy.length} file(s)` };
+    }
+
+    // If it imports other files but nothing imports it
+    const hasImports = dep.imports.length > 0;
+
+    // If it's an entry point, NOT orphan
+    if (dep.isEntryPoint) {
+      return { isOrphan: false, reason: 'Entry point (main/index file)' };
+    }
+
+    // If it's in a static/public directory (served via HTML), NOT orphan
+    if (this.isInStaticDirectory(dep.path)) {
+      return { isOrphan: false, reason: 'Static asset (served via HTML, not imports)' };
+    }
+
+    // If it's a test file, NOT orphan (tests are run separately)
+    if (this.isTestFile(dep.path)) {
+      return { isOrphan: false, reason: 'Test file (run by test framework)' };
+    }
+
+    // If it's a config file, NOT orphan
+    if (this.isConfigFile(dep.path)) {
+      return { isOrphan: false, reason: 'Config file (loaded by bundler/tooling)' };
+    }
+
+    // If it's a script/worker file, NOT orphan
+    if (this.isScriptOrWorker(dep.path)) {
+      return { isOrphan: false, reason: 'Worker/Script (loaded at runtime)' };
+    }
+
+    // If it's in the root directory (likely an entry point), NOT orphan
+    if (this.isRootFile(dep.path)) {
+      return { isOrphan: false, reason: 'Root-level file (likely external entry point)' };
+    }
+
+    // If it's a type definition file, NOT orphan
+    if (this.isTypeDefinition(dep.path)) {
+      return { isOrphan: false, reason: 'Type definition (used by TypeScript compiler)' };
+    }
+
+    // If it's a stories/storybook file, NOT orphan
+    if (this.isStorybookFile(dep.path)) {
+      return { isOrphan: false, reason: 'Storybook story (loaded by Storybook)' };
+    }
+
+    // Otherwise, it's likely a true orphan
+    return { 
+      isOrphan: true, 
+      reason: hasImports 
+        ? 'Orphan: imports files but nothing imports this file' 
+        : 'Orphan: no imports and not imported by any file'
+    };
+  }
+
+  // Check if file is in a static/public directory
+  private isInStaticDirectory(filePath: string): boolean {
+    const normalizedPath = filePath.toLowerCase();
+    return this.STATIC_DIRS.some(dir => 
+      normalizedPath.startsWith(`${dir}/`) || 
+      normalizedPath.includes(`/${dir}/`)
+    );
+  }
+
+  // Check if file is in root directory (no subdirectories)
+  private isRootFile(filePath: string): boolean {
+    return !filePath.includes('/');
+  }
+
+  // Check if file is a script or worker
+  private isScriptOrWorker(filePath: string): boolean {
+    const patterns = [
+      /worker\.(js|ts|mjs)$/i,
+      /sw\.(js|ts|mjs)$/i,
+      /service-worker\.(js|ts|mjs)$/i,
+      /serviceWorker\.(js|ts|mjs)$/i,
+      /script\.(js|ts|mjs)$/i,
+      /loader\.(js|ts|mjs)$/i,
+      /bootstrap\.(js|ts|mjs)$/i,
+      /polyfill/i,
+      /shim/i,
+    ];
+    return patterns.some(pattern => pattern.test(filePath));
+  }
+
+  // Check if file is a type definition
+  private isTypeDefinition(filePath: string): boolean {
+    return /\.d\.(ts|tsx)$/.test(filePath) || 
+           filePath.includes('/types/') ||
+           filePath.includes('/@types/');
+  }
+
+  // Check if file is a Storybook story
+  private isStorybookFile(filePath: string): boolean {
+    return /\.stories\.(js|jsx|ts|tsx)$/.test(filePath) ||
+           filePath.includes('/.storybook/');
   }
 
   // Extract all imports from file content

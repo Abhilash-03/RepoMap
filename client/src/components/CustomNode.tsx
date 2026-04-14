@@ -1,5 +1,5 @@
 import { Handle, Position } from '@xyflow/react';
-import { FileCode, FileWarning, Play, ArrowDownToLine, ArrowUpFromLine } from 'lucide-react';
+import { FileCode, FileWarning, Play, ArrowDownToLine, ArrowUpFromLine, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface NodeData {
@@ -8,6 +8,7 @@ interface NodeData {
   isEntryPoint: boolean;
   importCount: number;
   importedByCount: number;
+  statusReason?: string;
 }
 
 interface CustomNodeProps {
@@ -62,17 +63,42 @@ export default function CustomNode({ data }: CustomNodeProps) {
               <ArrowUpFromLine className="h-2.5 w-2.5" />
               {data.importedByCount}
             </span>
+            {data.statusReason && (
+              <span 
+                className="flex items-center gap-0.5 text-blue-500 cursor-help" 
+                title={data.statusReason}
+              >
+                <Info className="h-2.5 w-2.5" />
+              </span>
+            )}
           </div>
         </div>
       </div>
 
-      {(data.isOrphan || data.isEntryPoint) && (
-        <div className={cn(
-          'absolute -top-2 -right-2 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-wide shadow-sm',
-          data.isOrphan && 'bg-red-500 text-white',
-          data.isEntryPoint && 'bg-emerald-500 text-white'
-        )}>
-          {data.isOrphan ? 'Orphan' : 'Entry'}
+      {/* Status badge - shows orphan, entry, or standalone status */}
+      {data.isOrphan && (
+        <div 
+          className="absolute -top-2 -right-2 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-wide shadow-sm bg-red-500 text-white cursor-help"
+          title={data.statusReason}
+        >
+          Orphan
+        </div>
+      )}
+      {data.isEntryPoint && !data.isOrphan && (
+        <div 
+          className="absolute -top-2 -right-2 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-wide shadow-sm bg-emerald-500 text-white cursor-help"
+          title={data.statusReason}
+        >
+          Entry
+        </div>
+      )}
+      {/* Show "Info" badge for standalone files that are neither orphan nor entry point */}
+      {!data.isOrphan && !data.isEntryPoint && data.importCount === 0 && data.importedByCount === 0 && data.statusReason && (
+        <div 
+          className="absolute -top-2 -right-2 px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-wide shadow-sm bg-blue-500 text-white cursor-help"
+          title={data.statusReason}
+        >
+          Info
         </div>
       )}
       

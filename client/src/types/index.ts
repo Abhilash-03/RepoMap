@@ -11,6 +11,7 @@ export interface FileDependency {
   importedBy: string[];
   isOrphan: boolean;
   isEntryPoint: boolean;
+  statusReason?: string;  // Explanation of why file has its current orphan status
 }
 
 export interface GraphNode {
@@ -22,6 +23,7 @@ export interface GraphNode {
     isEntryPoint: boolean;
     importCount: number;
     importedByCount: number;
+    statusReason?: string;
   };
   position: { x: number; y: number };
   style?: Record<string, string | number>;

@@ -81,7 +81,8 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
+    <>
+    <div className="h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
       {/* Header */}
       <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -379,15 +380,16 @@ function App() {
         )}
       </main>
 
+    </div>
       {/* Footer */}
-      <footer className="border-t mt-8">
+      <footer className="border-t">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <p className="text-center text-sm text-slate-500">
             Made with ❤️ for developers who love clean code
           </p>
         </div>
       </footer>
-    </div>
+    </>
   );
 }
 

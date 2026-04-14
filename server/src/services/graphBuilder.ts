@@ -23,6 +23,7 @@ export class GraphBuilder {
           isEntryPoint: dep.isEntryPoint,
           importCount: dep.imports.length,
           importedByCount: dep.importedBy.length,
+          statusReason: dep.statusReason,
         },
         position: pos,
         style: dep.isOrphan ? {

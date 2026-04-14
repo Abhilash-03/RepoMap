@@ -25,6 +25,7 @@ export interface FileDependency {
   importedBy: string[];   // Files that import this file
   isOrphan: boolean;
   isEntryPoint: boolean;
+  statusReason?: string;  // Explanation of why file has its current orphan status
 }
 
 // Node for React Flow visualization
@@ -37,6 +38,7 @@ export interface GraphNode {
     isEntryPoint: boolean;
     importCount: number;
     importedByCount: number;
+    statusReason?: string;
   };
   position: { x: number; y: number };
   style?: Record<string, string | number>;
