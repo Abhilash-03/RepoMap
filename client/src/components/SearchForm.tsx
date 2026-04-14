@@ -15,8 +15,8 @@ interface SearchFormProps {
 function SearchForm({ repoUrl, setRepoUrl, isLoading, onSubmit, hasResult }: SearchFormProps) {
   return (
     <Card className={cn("mb-8", !hasResult && "max-w-2xl mx-auto")}>
-      <CardContent className="pt-6">
-        <form onSubmit={onSubmit} className="flex gap-3">
+      <CardContent className="pt-4 sm:pt-6">
+        <form onSubmit={onSubmit} className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
             <GitBranch className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
             <Input
@@ -24,14 +24,14 @@ function SearchForm({ repoUrl, setRepoUrl, isLoading, onSubmit, hasResult }: Sea
               value={repoUrl}
               onChange={(e) => setRepoUrl(e.target.value)}
               placeholder="https://github.com/owner/repo"
-              className="pl-10 h-11"
+              className="pl-10 h-11 text-sm sm:text-base"
               disabled={isLoading}
             />
           </div>
           <Button 
             type="submit" 
             disabled={isLoading || !repoUrl.trim()}
-            className="h-11 px-6 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700"
+            className="h-11 px-6 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 w-full sm:w-auto"
           >
             {isLoading ? (
               <>

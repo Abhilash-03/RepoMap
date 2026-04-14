@@ -15,25 +15,25 @@ function ResultsTabs({ result, onToggleFullScreen }: ResultsTabsProps) {
   return (
     <Tabs defaultValue="graph" className="space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <TabsList>
-          <TabsTrigger value="graph" className="gap-2">
-            <Network className="h-4 w-4" />
-            Dependency Graph
+        <TabsList className="w-full sm:w-auto grid grid-cols-2 sm:flex">
+          <TabsTrigger value="graph" className="gap-1.5 sm:gap-2 text-xs sm:text-sm">
+            <Network className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+            <span className="hidden xs:inline">Dependency</span> Graph
           </TabsTrigger>
-          <TabsTrigger value="orphans" className="gap-2">
-            <FileWarning className="h-4 w-4" />
-            Orphan Files
+          <TabsTrigger value="orphans" className="gap-1.5 sm:gap-2 text-xs sm:text-sm">
+            <FileWarning className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+            Orphans
             {result.orphanFiles.length > 0 && (
-              <Badge variant="destructive" className="ml-1 h-5 px-1.5">
+              <Badge variant="destructive" className="ml-1 h-5 px-1.5 text-xs">
                 {result.orphanFiles.length}
               </Badge>
             )}
           </TabsTrigger>
         </TabsList>
 
-        <Badge variant="outline" className="flex gap-1 w-fit">
-          <GitBranch className="h-3 w-3" />
-          {result.repoInfo.owner}/{result.repoInfo.repo}
+        <Badge variant="outline" className="flex gap-1 w-fit text-xs sm:text-sm truncate max-w-full">
+          <GitBranch className="h-3 w-3 shrink-0" />
+          <span className="truncate">{result.repoInfo.owner}/{result.repoInfo.repo}</span>
         </Badge>
       </div>
 
