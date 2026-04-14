@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Settings, Key, ExternalLink, Check, Trash2, AlertTriangle } from 'lucide-react';
+import { Settings, Key, ExternalLink, Check, Trash2, AlertTriangle, RefreshCw, Zap } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -14,8 +14,11 @@ import { Badge } from '@/components/ui/badge';
 import { 
   getStoredGitHubToken, 
   setStoredGitHubToken, 
-  clearStoredGitHubToken 
+  clearStoredGitHubToken,
+  checkRateLimit,
+  type RateLimitInfo,
 } from '@/services/api';
+import { cn } from '@/lib/utils';
 
 interface TokenSettingsProps {
   onTokenChange?: () => void;
@@ -26,6 +29,22 @@ export default function TokenSettings({ onTokenChange }: TokenSettingsProps) {
   const [hasToken, setHasToken] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [rateLimit, setRateLimit] = useState<RateLimitInfo | null>(null);
+  const [isLoadingRate, setIsLoadingRate] = useState(false);
+  const [rateError, setRateError] = useState<string | null>(null);
+
+  const fetchRateLimit = async () => {
+    setIsLoadingRate(true);
+    setRateError(null);
+    try {
+      const info = await checkRateLimit();
+      setRateLimit(info);
+    } catch {
+      setRateError('Failed to fetch');
+    } finally {
+      setIsLoadingRate(false);
+    }
+  };
 
   useEffect(() => {
     const stored = getStoredGitHubToken();
@@ -35,21 +54,31 @@ export default function TokenSettings({ onTokenChange }: TokenSettingsProps) {
     }
   }, [isOpen]);
 
-  const handleSave = () => {
+  useEffect(() => {
+    if (isOpen) {
+      fetchRateLimit();
+    }
+  }, [isOpen, hasToken]);
+
+  const handleSave = async () => {
     if (token && !token.includes('•')) {
       setStoredGitHubToken(token);
       setHasToken(true);
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
       onTokenChange?.();
+      // Refresh rate limit after saving new token
+      await fetchRateLimit();
     }
   };
 
-  const handleClear = () => {
+  const handleClear = async () => {
     clearStoredGitHubToken();
     setToken('');
     setHasToken(false);
     onTokenChange?.();
+    // Refresh rate limit after clearing token
+    await fetchRateLimit();
   };
 
   const handleTokenChange = (value: string) => {
@@ -96,6 +125,57 @@ export default function TokenSettings({ onTokenChange }: TokenSettingsProps) {
                 <AlertTriangle className="h-3 w-3 mr-1" />
                 No token (60 req/hr)
               </Badge>
+            )}
+          </div>
+
+          {/* Rate Limit Display */}
+          <div className="border rounded-lg p-3 bg-slate-50">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <Zap className="h-4 w-4 text-violet-500" />
+                <span className="text-sm font-medium text-slate-700">API Rate Limit</span>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={fetchRateLimit}
+                disabled={isLoadingRate}
+                className="h-7 px-2"
+              >
+                <RefreshCw className={cn("h-3.5 w-3.5", isLoadingRate && "animate-spin")} />
+              </Button>
+            </div>
+            
+            {rateError ? (
+              <p className="text-xs text-red-500">{rateError}</p>
+            ) : rateLimit ? (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-slate-500">Remaining</span>
+                  <span className={cn(
+                    "font-semibold",
+                    rateLimit.remaining < 10 ? "text-red-600" :
+                    rateLimit.remaining < 100 ? "text-amber-600" : "text-emerald-600"
+                  )}>
+                    {rateLimit.remaining.toLocaleString()} / {rateLimit.limit.toLocaleString()}
+                  </span>
+                </div>
+                <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
+                  <div 
+                    className={cn(
+                      "h-full rounded-full transition-all",
+                      rateLimit.remaining / rateLimit.limit > 0.5 ? "bg-emerald-500" :
+                      rateLimit.remaining / rateLimit.limit > 0.1 ? "bg-amber-500" : "bg-red-500"
+                    )}
+                    style={{ width: `${(rateLimit.remaining / rateLimit.limit) * 100}%` }}
+                  />
+                </div>
+                <p className="text-xs text-slate-400">
+                  Resets at {new Date(rateLimit.reset * 1000).toLocaleTimeString()}
+                </p>
+              </div>
+            ) : (
+              <p className="text-xs text-slate-400">Loading...</p>
             )}
           </div>
 
