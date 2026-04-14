@@ -4,21 +4,15 @@ import path from 'path';
 export class DependencyAnalyzer {
   // Common entry point patterns - files that are typically referenced externally
   private readonly ENTRY_PATTERNS = [
-    // Standard entry points
-    /^index\.(js|jsx|ts|tsx|mjs)$/i,
-    /^main\.(js|jsx|ts|tsx|mjs)$/i,
-    /^app\.(js|jsx|ts|tsx|mjs)$/i,
-    /^script\.(js|jsx|ts|tsx|mjs)$/i,
-    // src folder entry points
-    /^src\/index\.(js|jsx|ts|tsx|mjs)$/i,
-    /^src\/main\.(js|jsx|ts|tsx|mjs)$/i,
-    /^src\/App\.(js|jsx|ts|tsx|mjs)$/i,
-    // Server entry points
-    /^server\.(js|ts|mjs)$/i,
-    /^server\/index\.(js|ts|mjs)$/i,
+    // main.tsx/ts anywhere in a src folder (client/src/main.tsx, packages/app/src/main.ts, etc.)
+    /\/src\/main\.(js|jsx|ts|tsx|mjs)$/i,
+    // index files directly inside src folders (entry points, not nested index files)
+    /\/src\/index\.(js|jsx|ts|tsx|mjs)$/i,
+    // Root level entry points (main.ts, index.js at repo root)
+    /^(main|index)\.(js|jsx|ts|tsx|mjs)$/i,
     // CLI/bin entry points
-    /^bin\//i,
-    /^cli\.(js|ts|mjs)$/i,
+    /\/bin\//i,
+    /\/cli\.(js|ts|mjs)$/i,
   ];
 
   // Directories where files are typically served directly (not imported)
@@ -207,8 +201,8 @@ export class DependencyAnalyzer {
       let match;
       while ((match = pattern.exec(content)) !== null) {
         const source = match[1];
-        // Only track local imports (starting with . or /)
-        if (source.startsWith('.') || source.startsWith('/')) {
+        // Track local imports (., /) and path aliases (@/, ~/, #/)
+        if (source.startsWith('.') || source.startsWith('/') || source.startsWith('@/') || source.startsWith('~/') || source.startsWith('#/')) {
           imports.push({
             source,
             resolved: null,
@@ -225,7 +219,22 @@ export class DependencyAnalyzer {
   // Resolve an import path to actual file path in repo
   private resolveImport(importSource: string, fromFile: string, allPaths: Set<string>): string | null {
     const fromDir = path.dirname(fromFile);
-    let resolved = path.posix.join(fromDir, importSource);
+    let resolved: string;
+    
+    // Handle path aliases (@/, ~/, #/) - dynamically find the src folder
+    if (importSource.startsWith('@/') || importSource.startsWith('~/') || importSource.startsWith('#/')) {
+      // Find the src directory that contains the importing file
+      // This handles: client/src/..., server/src/..., packages/app/src/..., or just src/...
+      const srcFolder = this.findSrcFolder(fromFile, allPaths);
+      if (srcFolder) {
+        resolved = importSource.replace(/^[@~#]\//, srcFolder + '/');
+      } else {
+        // Fallback: try treating alias as relative to closest parent with src
+        resolved = importSource.replace(/^[@~#]\//, 'src/');
+      }
+    } else {
+      resolved = path.posix.join(fromDir, importSource);
+    }
     
     // Normalize path separators
     resolved = resolved.replace(/\\/g, '/');
@@ -238,6 +247,21 @@ export class DependencyAnalyzer {
     // Try exact match first
     if (allPaths.has(resolved)) {
       return resolved;
+    }
+
+    // Handle TypeScript ESM pattern: imports use .js but files are .ts
+    // e.g., import from './foo.js' -> actual file is './foo.ts'
+    if (resolved.endsWith('.js')) {
+      const tsPath = resolved.replace(/\.js$/, '.ts');
+      if (allPaths.has(tsPath)) {
+        return tsPath;
+      }
+    }
+    if (resolved.endsWith('.jsx')) {
+      const tsxPath = resolved.replace(/\.jsx$/, '.tsx');
+      if (allPaths.has(tsxPath)) {
+        return tsxPath;
+      }
     }
 
     // Try with various extensions
@@ -260,6 +284,34 @@ export class DependencyAnalyzer {
     return null;
   }
 
+  // Find the src folder that contains a file
+  // Handles: client/src/..., server/src/..., packages/app/src/..., or just src/...
+  private findSrcFolder(filePath: string, allPaths: Set<string>): string | null {
+    const parts = filePath.split('/');
+    
+    // Walk backwards to find 'src' in the path
+    for (let i = parts.length - 1; i >= 0; i--) {
+      if (parts[i] === 'src') {
+        // Return the path up to and including 'src'
+        return parts.slice(0, i + 1).join('/');
+      }
+    }
+    
+    // If no src found in path, try to find a src folder at same level as the file's root
+    // This handles monorepos where file might be at packages/foo/lib but src is at packages/foo/src
+    for (let i = parts.length - 2; i >= 0; i--) {
+      const potentialSrc = [...parts.slice(0, i + 1), 'src'].join('/');
+      // Check if any file exists under this src folder
+      for (const p of allPaths) {
+        if (p.startsWith(potentialSrc + '/')) {
+          return potentialSrc;
+        }
+      }
+    }
+    
+    return null;
+  }
+
   // Check if file is a likely entry point
   private isEntryPoint(filePath: string): boolean {
     return this.ENTRY_PATTERNS.some(pattern => pattern.test(filePath));
@@ -279,17 +331,42 @@ export class DependencyAnalyzer {
 
   // Check if file is a config file
   private isConfigFile(filePath: string): boolean {
+    const fileName = filePath.split('/').pop() || filePath;
+    
+    // Generic patterns that catch most config files
     const configPatterns = [
-      /\.config\.(js|ts|mjs)$/,
-      /vite\.config/,
-      /webpack\.config/,
-      /jest\.config/,
-      /eslint/,
-      /prettier/,
-      /babel\.config/,
-      /tsconfig/,
-      /tailwind\.config/,
+      // Any file with .config. in the name (vite.config.ts, postcss.config.cjs, etc.)
+      /\.config\.(js|cjs|mjs|ts|json)$/i,
+      // RC files (.eslintrc, .prettierrc, .babelrc, etc.)
+      /\.[a-z]+rc(\.(js|cjs|mjs|ts|json|ya?ml))?$/i,
+      // tsconfig, jsconfig files
+      /[tj]sconfig(\.[a-z]+)?\.json$/i,
+      // Environment files
+      /\.env(\.[a-z]+)?$/i,
+      // Lock files and manifests
+      /package\.json$/,
+      /package-lock\.json$/,
+      /yarn\.lock$/,
+      /pnpm-lock\.ya?ml$/,
+      // Root dotfiles that are configs
+      /^\.[a-z]/i,
     ];
-    return configPatterns.some(pattern => pattern.test(filePath));
+    
+    // Check patterns against full path and filename
+    if (configPatterns.some(pattern => pattern.test(filePath) || pattern.test(fileName))) {
+      return true;
+    }
+    
+    // Common config file names (case-insensitive)
+    const configNames = [
+      'gulpfile', 'gruntfile', 'makefile', 'dockerfile',
+      'manifest', 'vercel', 'netlify', 'railway',
+    ];
+    const lowerFileName = fileName.toLowerCase();
+    if (configNames.some(name => lowerFileName.includes(name))) {
+      return true;
+    }
+    
+    return false;
   }
 }
