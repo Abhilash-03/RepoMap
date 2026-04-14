@@ -3,6 +3,7 @@ import { DocsHeader, DocsSidebar, DocsContent, navigation } from '@/components/d
 
 export default function DocsPage() {
   const [activeSection, setActiveSection] = useState('introduction');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Track scroll position to highlight active section
   useEffect(() => {
@@ -32,16 +33,22 @@ export default function DocsPage() {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+    setIsSidebarOpen(false); // Close sidebar on mobile after navigation
   };
 
   return (
     <div className="min-h-screen bg-white">
-      <DocsHeader />
+      <DocsHeader 
+        isSidebarOpen={isSidebarOpen}
+        onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+      />
 
       <div className="flex pt-16">
         <DocsSidebar 
           activeSection={activeSection} 
-          onSectionClick={scrollToSection} 
+          onSectionClick={scrollToSection}
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
         />
         <DocsContent />
       </div>

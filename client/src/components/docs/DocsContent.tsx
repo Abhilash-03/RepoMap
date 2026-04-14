@@ -17,8 +17,8 @@ import FeatureCard from './FeatureCard';
 
 function DocsContent() {
   return (
-    <main className="flex-1 lg:ml-64">
-      <div className="max-w-4xl mx-auto px-6 py-10">
+    <main className="flex-1 w-full min-w-0 lg:ml-64">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
         {/* Introduction */}
         <Section id="introduction" title="Introduction">
           <p className="text-lg text-slate-600 mb-6">
@@ -174,12 +174,12 @@ function DocsContent() {
           </p>
 
           <div className="relative">
-            <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-slate-200"></div>
+            <div className="absolute left-3 sm:left-4 top-0 bottom-0 w-0.5 bg-slate-200"></div>
             
             <div className="space-y-8">
-              <div className="relative flex gap-6">
-                <div className="h-8 w-8 rounded-full bg-violet-600 flex items-center justify-center shrink-0 text-white font-bold text-sm z-10">1</div>
-                <div className="pb-8">
+              <div className="relative flex gap-3 sm:gap-6">
+                <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-full bg-violet-600 flex items-center justify-center shrink-0 text-white font-bold text-xs sm:text-sm z-10">1</div>
+                <div className="pb-8 min-w-0 flex-1">
                   <h4 className="font-semibold text-slate-900 mb-2">Repository Fetch</h4>
                   <p className="text-slate-600 text-sm">
                     Using the GitHub API, we fetch the repository's file tree and retrieve content for all supported JavaScript/TypeScript files. We skip common non-essential directories like node_modules, dist, and build.
@@ -192,9 +192,9 @@ const SKIP = ['node_modules', 'dist', 'build', '.git', 'coverage'];`} />
                 </div>
               </div>
 
-              <div className="relative flex gap-6">
-                <div className="h-8 w-8 rounded-full bg-violet-600 flex items-center justify-center shrink-0 text-white font-bold text-sm z-10">2</div>
-                <div className="pb-8">
+              <div className="relative flex gap-3 sm:gap-6">
+                <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-full bg-violet-600 flex items-center justify-center shrink-0 text-white font-bold text-xs sm:text-sm z-10">2</div>
+                <div className="pb-8 min-w-0 flex-1">
                   <h4 className="font-semibold text-slate-900 mb-2">Import Extraction</h4>
                   <p className="text-slate-600 text-sm">
                     Each file is parsed to extract import statements. We support ES6 imports, CommonJS require, dynamic imports, and re-exports.
@@ -210,9 +210,9 @@ export { X } from './module';       // Re-export`} />
                 </div>
               </div>
 
-              <div className="relative flex gap-6">
-                <div className="h-8 w-8 rounded-full bg-violet-600 flex items-center justify-center shrink-0 text-white font-bold text-sm z-10">3</div>
-                <div className="pb-8">
+              <div className="relative flex gap-3 sm:gap-6">
+                <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-full bg-violet-600 flex items-center justify-center shrink-0 text-white font-bold text-xs sm:text-sm z-10">3</div>
+                <div className="pb-8 min-w-0 flex-1">
                   <h4 className="font-semibold text-slate-900 mb-2">Path Resolution</h4>
                   <p className="text-slate-600 text-sm">
                     Import paths are resolved to actual file paths. This includes handling relative paths, path aliases (@/), extension inference, and index file resolution.
@@ -224,9 +224,9 @@ export { X } from './module';       // Re-export`} />
                 </div>
               </div>
 
-              <div className="relative flex gap-6">
-                <div className="h-8 w-8 rounded-full bg-violet-600 flex items-center justify-center shrink-0 text-white font-bold text-sm z-10">4</div>
-                <div className="pb-8">
+              <div className="relative flex gap-3 sm:gap-6">
+                <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-full bg-violet-600 flex items-center justify-center shrink-0 text-white font-bold text-xs sm:text-sm z-10">4</div>
+                <div className="pb-8 min-w-0 flex-1">
                   <h4 className="font-semibold text-slate-900 mb-2">Graph Construction</h4>
                   <p className="text-slate-600 text-sm">
                     A directed graph is built where nodes are files and edges are import relationships. Each node is classified as an entry point, regular file, or orphan based on analysis rules.
@@ -234,9 +234,9 @@ export { X } from './module';       // Re-export`} />
                 </div>
               </div>
 
-              <div className="relative flex gap-6">
-                <div className="h-8 w-8 rounded-full bg-violet-600 flex items-center justify-center shrink-0 text-white font-bold text-sm z-10">5</div>
-                <div>
+              <div className="relative flex gap-3 sm:gap-6">
+                <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-full bg-violet-600 flex items-center justify-center shrink-0 text-white font-bold text-xs sm:text-sm z-10">5</div>
+                <div className="min-w-0 flex-1">
                   <h4 className="font-semibold text-slate-900 mb-2">Visualization</h4>
                   <p className="text-slate-600 text-sm">
                     The graph is rendered using React Flow with ELK layout algorithm for automatic node positioning. The result is an interactive, zoomable visualization.

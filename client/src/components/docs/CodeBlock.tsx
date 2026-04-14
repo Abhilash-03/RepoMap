@@ -16,8 +16,8 @@ function CodeBlock({ code, language = 'typescript' }: CodeBlockProps) {
   };
 
   return (
-    <div className="relative group rounded-lg overflow-hidden bg-slate-900 my-4">
-      <div className="flex items-center justify-between px-4 py-2 bg-slate-800 border-b border-slate-700">
+    <div className="relative group rounded-lg overflow-hidden bg-slate-900 my-4 max-w-full">
+      <div className="flex items-center justify-between px-3 sm:px-4 py-2 bg-slate-800 border-b border-slate-700">
         <span className="text-xs text-slate-400 font-mono">{language}</span>
         <button
           onClick={handleCopy}
@@ -26,7 +26,7 @@ function CodeBlock({ code, language = 'typescript' }: CodeBlockProps) {
           {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
         </button>
       </div>
-      <pre className="p-4 overflow-x-auto text-sm">
+      <pre className="p-3 sm:p-4 overflow-x-auto text-xs sm:text-sm">
         <code className="text-slate-300 font-mono">{code}</code>
       </pre>
     </div>
