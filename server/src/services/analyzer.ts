@@ -5,14 +5,91 @@ export class DependencyAnalyzer {
   // Common entry point patterns - files that are typically referenced externally
   private readonly ENTRY_PATTERNS = [
     // main.tsx/ts anywhere in a src folder (client/src/main.tsx, packages/app/src/main.ts, etc.)
-    /\/src\/main\.(js|jsx|ts|tsx|mjs)$/i,
+    /(^|\/)src\/main\.(js|jsx|ts|tsx|mjs)$/i,
     // index files directly inside src folders (entry points, not nested index files)
-    /\/src\/index\.(js|jsx|ts|tsx|mjs)$/i,
+    /(^|\/)src\/index\.(js|jsx|ts|tsx|mjs)$/i,
     // Root level entry points (main.ts, index.js at repo root)
     /^(main|index)\.(js|jsx|ts|tsx|mjs)$/i,
     // CLI/bin entry points
-    /\/bin\//i,
-    /\/cli\.(js|ts|mjs)$/i,
+    /(^|\/)bin\//i,
+    /(^|\/)cli\.(js|ts|mjs)$/i,
+    
+    // Next.js entry points
+    // App Router: root layout is the entry point
+    /(^|\/)app\/layout\.(js|jsx|ts|tsx)$/i,
+    // Pages Router: _app is the entry point
+    /(^|\/)pages\/_app\.(js|jsx|ts|tsx)$/i,
+    // Home page as entry
+    /(^|\/)app\/page\.(js|jsx|ts|tsx)$/i,
+    /(^|\/)pages\/index\.(js|jsx|ts|tsx)$/i,
+    
+    // Nuxt.js entry points
+    /(^|\/)app\.vue$/i,
+    /(^|\/)pages\/index\.vue$/i,
+    
+    // Remix entry points
+    /(^|\/)app\/root\.(js|jsx|ts|tsx)$/i,
+    
+    // SvelteKit entry points
+    /(^|\/)src\/routes\/\+layout\.svelte$/i,
+    
+    // Astro entry points
+    /(^|\/)src\/pages\/index\.(astro|md|mdx)$/i,
+  ];
+
+  // Next.js specific patterns (App Router and Pages Router)
+  private readonly NEXTJS_PATTERNS = [
+    // App Router (Next.js 13+) - handles both with and without leading slash
+    // Nested routes: app/*/page.js, app/account-details/page.js, etc.
+    /(^|\/)app\/.*\/(page|layout|loading|error|not-found|template|default)\.(js|jsx|ts|tsx)$/i,
+    // Root app page: app/page.js
+    /(^|\/)app\/(page|layout|loading|error|not-found|template|default)\.(js|jsx|ts|tsx)$/i,
+    // API routes in app router: app/api/*/route.js, app/[...slug]/route.js (also support routes.js typo)
+    /(^|\/)app\/.*\/routes?\.(js|ts)$/i,
+    /(^|\/)app\/routes?\.(js|ts)$/i,
+    // Pages Router (legacy)
+    /(^|\/)pages\/.*\.(js|jsx|ts|tsx)$/i,  // All files in pages are routes
+    /(^|\/)pages\/api\/.*\.(js|ts)$/i,     // API routes
+    // Special Next.js files
+    /(^|\/)(middleware|instrumentation)\.(js|ts)$/i,
+    /(^|\/)_app\.(js|jsx|ts|tsx)$/i,
+    /(^|\/)_document\.(js|jsx|ts|tsx)$/i,
+    /(^|\/)_error\.(js|jsx|ts|tsx)$/i,
+    // next.config
+    /(^|\/)next\.config\.(js|mjs|ts)$/i,
+  ];
+
+  // Nuxt.js specific patterns
+  private readonly NUXTJS_PATTERNS = [
+    /(^|\/)pages\/.*\.vue$/i,
+    /(^|\/)layouts\/.*\.vue$/i,
+    /(^|\/)middleware\/.*\.(js|ts)$/i,
+    /(^|\/)plugins\/.*\.(js|ts)$/i,
+    /(^|\/)server\/(api|routes|middleware)\/.*\.(js|ts)$/i,
+    /(^|\/)nuxt\.config\.(js|ts)$/i,
+  ];
+
+  // Remix specific patterns
+  private readonly REMIX_PATTERNS = [
+    /(^|\/)app\/routes\/.*\.(js|jsx|ts|tsx)$/i,
+    /(^|\/)app\/root\.(js|jsx|ts|tsx)$/i,
+    /(^|\/)app\/entry\.(client|server)\.(js|jsx|ts|tsx)$/i,
+  ];
+
+  // SvelteKit specific patterns
+  private readonly SVELTEKIT_PATTERNS = [
+    /(^|\/)src\/routes\/.*\+page\.svelte$/i,
+    /(^|\/)src\/routes\/.*\+layout\.svelte$/i,
+    /(^|\/)src\/routes\/.*\+server\.(js|ts)$/i,
+    /(^|\/)src\/routes\/.*\+page\.(js|ts)$/i,
+    /(^|\/)svelte\.config\.(js|ts)$/i,
+  ];
+
+  // Astro specific patterns
+  private readonly ASTRO_PATTERNS = [
+    /(^|\/)src\/pages\/.*\.(astro|md|mdx)$/i,
+    /(^|\/)src\/layouts\/.*\.astro$/i,
+    /(^|\/)astro\.config\.(js|ts|mjs)$/i,
   ];
 
   // Directories where files are typically served directly (not imported)
@@ -121,6 +198,12 @@ export class DependencyAnalyzer {
       return { isOrphan: false, reason: 'Storybook story (loaded by Storybook)' };
     }
 
+    // If it's a framework-specific file (Next.js, Nuxt, Remix, etc.), NOT orphan
+    const frameworkInfo = this.isFrameworkFile(dep.path);
+    if (frameworkInfo) {
+      return { isOrphan: false, reason: frameworkInfo };
+    }
+
     // Otherwise, it's likely a true orphan
     return { 
       isOrphan: true, 
@@ -171,6 +254,74 @@ export class DependencyAnalyzer {
   private isStorybookFile(filePath: string): boolean {
     return /\.stories\.(js|jsx|ts|tsx)$/.test(filePath) ||
            filePath.includes('/.storybook/');
+  }
+
+  // Check if file is a framework-specific file (returns reason or null)
+  private isFrameworkFile(filePath: string): string | null {
+    // Next.js
+    if (this.NEXTJS_PATTERNS.some(pattern => pattern.test(filePath))) {
+      // API routes: app/*/route.js (or routes.js) or pages/api/*
+      if (/(^|\/)app\/.*\/routes?\.(js|ts)$/i.test(filePath) || /(^|\/)pages\/api\//i.test(filePath)) {
+        return 'Next.js API route (loaded by framework)';
+      }
+      // App Router files: page.js, layout.js, etc.
+      if (/(page|layout|loading|error|not-found|template|default)\.(js|jsx|ts|tsx)$/i.test(filePath)) {
+        return 'Next.js App Router file (loaded by framework)';
+      }
+      // Pages Router: pages/*.js
+      if (/(^|\/)pages\/.*\.(js|jsx|ts|tsx)$/i.test(filePath)) {
+        return 'Next.js page (loaded by framework router)';
+      }
+      // Middleware
+      if (/(^|\/)(middleware|instrumentation)\.(js|ts)$/i.test(filePath)) {
+        return 'Next.js middleware (loaded by framework)';
+      }
+      // Special files
+      if (/(^|\/)(_app|_document|_error)\.(js|jsx|ts|tsx)$/i.test(filePath)) {
+        return 'Next.js special file (loaded by framework)';
+      }
+      return 'Next.js framework file';
+    }
+
+    // Nuxt.js
+    if (this.NUXTJS_PATTERNS.some(pattern => pattern.test(filePath))) {
+      if (/(^|\/)server\/(api|routes)\//i.test(filePath)) {
+        return 'Nuxt.js server route (loaded by framework)';
+      }
+      if (/(^|\/)pages\//i.test(filePath)) {
+        return 'Nuxt.js page (loaded by framework router)';
+      }
+      return 'Nuxt.js framework file';
+    }
+
+    // Remix
+    if (this.REMIX_PATTERNS.some(pattern => pattern.test(filePath))) {
+      if (/(^|\/)app\/routes\//i.test(filePath)) {
+        return 'Remix route (loaded by framework)';
+      }
+      return 'Remix framework file';
+    }
+
+    // SvelteKit
+    if (this.SVELTEKIT_PATTERNS.some(pattern => pattern.test(filePath))) {
+      if (/\+page\.svelte$/i.test(filePath)) {
+        return 'SvelteKit page (loaded by framework)';
+      }
+      if (/\+server\.(js|ts)$/i.test(filePath)) {
+        return 'SvelteKit API endpoint (loaded by framework)';
+      }
+      return 'SvelteKit framework file';
+    }
+
+    // Astro
+    if (this.ASTRO_PATTERNS.some(pattern => pattern.test(filePath))) {
+      if (/(^|\/)src\/pages\//i.test(filePath)) {
+        return 'Astro page (loaded by framework)';
+      }
+      return 'Astro framework file';
+    }
+
+    return null;
   }
 
   // Extract all imports from file content
