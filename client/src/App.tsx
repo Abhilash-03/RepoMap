@@ -7,6 +7,7 @@ import SearchForm from '@/components/SearchForm';
 import StatsGrid from '@/components/StatsGrid';
 import ResultsTabs from '@/components/ResultsTabs';
 import FeatureCards from '@/components/FeatureCards';
+import ApiInfoSection from '@/components/ApiInfoSection';
 import Footer from '@/components/Footer';
 import { analyzeRepository, getStoredGitHubToken } from '@/services/api';
 import type { AnalysisResult } from '@/types';
@@ -73,11 +74,10 @@ function App() {
   }
 
   return (
-    <>
-      <div className="h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
-        <Header />
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-white to-slate-100">
+      <Header />
 
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {!result && <HeroSection />}
 
           <SearchForm
@@ -143,13 +143,17 @@ function App() {
             </>
           )}
 
-          {/* Feature Cards */}
-          {!result && !isLoading && !error && <FeatureCards />}
+          {/* Feature Cards & API Info */}
+          {!result && !isLoading && !error && (
+            <>
+              <FeatureCards />
+              <ApiInfoSection />
+            </>
+          )}
         </main>
-      </div>
 
       <Footer />
-    </>
+    </div>
   );
 }
 

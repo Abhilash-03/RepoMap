@@ -1,4 +1,5 @@
-import { GitBranch, Network } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { GitBranch, Network, BookOpen } from 'lucide-react';
 import TokenSettings from '@/components/TokenSettings';
 
 function Header() {
@@ -7,18 +8,27 @@ function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
-              <Network className="h-5 w-5 text-white" />
-            </div>
-            <div>
-              <h1 className="text-lg font-semibold text-slate-900">RepoMap</h1>
-              <p className="text-xs text-slate-500 hidden sm:block">Dependency Analyzer</p>
-            </div>
+            <Link to="/" className="flex items-center gap-3">
+              <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-violet-500 to-purple-600 flex items-center justify-center">
+                <Network className="h-5 w-5 text-white" />
+              </div>
+              <div>
+                <h1 className="text-lg font-semibold text-slate-900">RepoMap</h1>
+                <p className="text-xs text-slate-500 hidden sm:block">Dependency Analyzer</p>
+              </div>
+            </Link>
           </div>
           <div className="flex items-center gap-2">
+            <Link
+              to="/docs"
+              className="flex items-center gap-1.5 text-sm text-slate-600 hover:text-violet-600 transition-colors px-3 py-2 rounded-lg hover:bg-slate-100"
+            >
+              <BookOpen className="h-4 w-4" />
+              <span className="hidden sm:inline">Docs</span>
+            </Link>
             <TokenSettings />
             <a 
-              href="https://github.com" 
+              href="https://github.com/Abhilash-03/RepoMap" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-slate-500 hover:text-slate-900 transition-colors p-2"
