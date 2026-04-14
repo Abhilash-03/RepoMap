@@ -13,6 +13,7 @@ import {
   Code2,
   Terminal,
   AlertTriangle,
+  Boxes,
 } from 'lucide-react';
 
 export const navigation = [
@@ -36,6 +37,7 @@ export const navigation = [
   {
     title: 'File Detection',
     items: [
+      { id: 'supported-frameworks', label: 'Supported Frameworks', icon: Boxes },
       { id: 'supported-files', label: 'Supported Files', icon: FileCode },
       { id: 'import-resolution', label: 'Import Resolution', icon: FolderTree },
       { id: 'config-files', label: 'Config Files', icon: Settings },

@@ -390,6 +390,121 @@ index.js              // At repository root
           </Callout>
         </Section>
 
+        {/* Supported Frameworks */}
+        <Section id="supported-frameworks" title="Supported Frameworks">
+          <p className="text-slate-600 mb-6">
+            RepoMap intelligently detects framework-specific files that are loaded by their respective frameworks rather than through explicit imports. These files are never marked as orphans.
+          </p>
+
+          <h3 className="text-lg font-semibold text-slate-900 mt-8 mb-4">Languages</h3>
+          <div className="grid sm:grid-cols-2 gap-4 mb-8">
+            <div className="border rounded-lg p-4 bg-gradient-to-br from-yellow-50 to-white">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="h-10 w-10 rounded-lg bg-yellow-100 flex items-center justify-center">
+                  <span className="text-xl font-bold text-yellow-600">JS</span>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-slate-900">JavaScript</h4>
+                  <p className="text-xs text-slate-500">.js, .jsx, .mjs, .cjs</p>
+                </div>
+              </div>
+            </div>
+            <div className="border rounded-lg p-4 bg-gradient-to-br from-blue-50 to-white">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center">
+                  <span className="text-xl font-bold text-blue-600">TS</span>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-slate-900">TypeScript</h4>
+                  <p className="text-xs text-slate-500">.ts, .tsx</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3 className="text-lg font-semibold text-slate-900 mt-8 mb-4">React Ecosystem</h3>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+            <div className="border rounded-lg p-4">
+              <h4 className="font-semibold text-slate-900 mb-2">React / Vite</h4>
+              <p className="text-sm text-slate-600 mb-3">Standard React apps with Vite or CRA</p>
+              <div className="text-xs text-slate-500 space-y-1">
+                <div>✓ src/main.tsx entry point</div>
+                <div>✓ Component imports</div>
+                <div>✓ Path aliases (@/)</div>
+              </div>
+            </div>
+            <div className="border rounded-lg p-4 border-violet-200 bg-violet-50/30">
+              <h4 className="font-semibold text-slate-900 mb-2">Next.js</h4>
+              <p className="text-sm text-slate-600 mb-3">App Router & Pages Router</p>
+              <div className="text-xs text-slate-500 space-y-1">
+                <div>✓ app/ directory (page, layout, route)</div>
+                <div>✓ pages/ directory routes</div>
+                <div>✓ API routes (pages/api, app/route)</div>
+                <div>✓ middleware.ts</div>
+                <div>✓ _app, _document, _error</div>
+              </div>
+            </div>
+            <div className="border rounded-lg p-4">
+              <h4 className="font-semibold text-slate-900 mb-2">Remix</h4>
+              <p className="text-sm text-slate-600 mb-3">Full stack React framework</p>
+              <div className="text-xs text-slate-500 space-y-1">
+                <div>✓ app/routes/ file-based routing</div>
+                <div>✓ root.tsx</div>
+                <div>✓ entry.client/server.tsx</div>
+              </div>
+            </div>
+          </div>
+
+          <h3 className="text-lg font-semibold text-slate-900 mt-8 mb-4">Vue Ecosystem</h3>
+          <div className="grid sm:grid-cols-2 gap-4 mb-8">
+            <div className="border rounded-lg p-4">
+              <h4 className="font-semibold text-slate-900 mb-2">Vue.js</h4>
+              <p className="text-sm text-slate-600 mb-3">Standard Vue 3 applications</p>
+              <div className="text-xs text-slate-500 space-y-1">
+                <div>✓ main.ts entry point</div>
+                <div>✓ Component imports</div>
+                <div>✓ Composables</div>
+              </div>
+            </div>
+            <div className="border rounded-lg p-4 border-green-200 bg-green-50/30">
+              <h4 className="font-semibold text-slate-900 mb-2">Nuxt.js</h4>
+              <p className="text-sm text-slate-600 mb-3">Vue meta-framework</p>
+              <div className="text-xs text-slate-500 space-y-1">
+                <div>✓ pages/ auto-routing</div>
+                <div>✓ layouts/ directory</div>
+                <div>✓ server/api/ routes</div>
+                <div>✓ middleware/ & plugins/</div>
+              </div>
+            </div>
+          </div>
+
+          <h3 className="text-lg font-semibold text-slate-900 mt-8 mb-4">Other Frameworks</h3>
+          <div className="grid sm:grid-cols-2 gap-4 mb-6">
+            <div className="border rounded-lg p-4">
+              <h4 className="font-semibold text-slate-900 mb-2">SvelteKit</h4>
+              <p className="text-sm text-slate-600 mb-3">Svelte meta-framework</p>
+              <div className="text-xs text-slate-500 space-y-1">
+                <div>✓ +page.svelte routes</div>
+                <div>✓ +layout.svelte</div>
+                <div>✓ +server.ts API endpoints</div>
+              </div>
+            </div>
+            <div className="border rounded-lg p-4">
+              <h4 className="font-semibold text-slate-900 mb-2">Astro</h4>
+              <p className="text-sm text-slate-600 mb-3">Content-focused framework</p>
+              <div className="text-xs text-slate-500 space-y-1">
+                <div>✓ src/pages/ routing (.astro, .md)</div>
+                <div>✓ src/layouts/</div>
+                <div>✓ Island architecture</div>
+              </div>
+            </div>
+          </div>
+
+          <Callout type="success" title="Framework Detection">
+            RepoMap automatically detects which framework a repository uses based on file patterns. Framework-specific files like pages, routes, and layouts are correctly identified and never marked as orphans.
+          </Callout>
+        </Section>
+
         {/* Supported Files */}
         <Section id="supported-files" title="Supported Files">
           <p className="text-slate-600 mb-6">
