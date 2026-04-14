@@ -69,15 +69,6 @@ The app will be available at:
 - **Frontend:** http://localhost:5173
 - **Backend:** http://localhost:3001
 
-### Environment Variables (Optional)
-
-Create a `.env` file in the `server/` directory:
-
-```env
-GITHUB_TOKEN=your_github_personal_access_token
-PORT=3001
-```
-
 ## 📖 Usage
 
 1. **Open the app** in your browser at `http://localhost:5173`
