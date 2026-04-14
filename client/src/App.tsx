@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, AlertCircle, Info } from 'lucide-react';
+import { AlertCircle, Info } from 'lucide-react';
 import DependencyGraph from '@/components/DependencyGraph';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
@@ -11,7 +11,6 @@ import ApiInfoSection from '@/components/ApiInfoSection';
 import Footer from '@/components/Footer';
 import { analyzeRepository, getStoredGitHubToken } from '@/services/api';
 import type { AnalysisResult } from '@/types';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -49,17 +48,8 @@ function App() {
   if (isFullScreen && result) {
     return (
       <div className="fixed inset-0 z-50 bg-slate-900">
-        <div className="absolute bottom-4 left-4 z-10 flex items-center gap-3">
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => setIsFullScreen(false)}
-            className="bg-white/90 backdrop-blur-sm"
-          >
-            <X className="h-4 w-4 mr-2" />
-            Exit Full Screen
-          </Button>
-          <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm">
+        <div className="absolute bottom-4 right-1 md:left-12 z-10">
+          <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm text-xs sm:text-sm max-w-full truncate">
             {result.repoInfo.owner}/{result.repoInfo.repo}
           </Badge>
         </div>
