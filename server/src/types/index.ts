@@ -34,6 +34,7 @@ export interface GraphNode {
   type: 'default' | 'input' | 'output';
   data: {
     label: string;
+    fullPath: string;
     isOrphan: boolean;
     isEntryPoint: boolean;
     importCount: number;

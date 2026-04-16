@@ -155,8 +155,11 @@ export class DependencyAnalyzer {
       return { isOrphan: false, reason: `Imported by ${dep.importedBy.length} file(s)` };
     }
 
-    // If it imports other files but nothing imports it
-    const hasImports = dep.imports.length > 0;
+    // If it imports other local files, it's part of the dependency graph, NOT orphan
+    // This handles cases where a file might be imported via unresolved alias
+    if (dep.imports.length > 0) {
+      return { isOrphan: false, reason: `Connected: imports ${dep.imports.length} file(s)` };
+    }
 
     // If it's an entry point, NOT orphan
     if (dep.isEntryPoint) {
@@ -204,13 +207,119 @@ export class DependencyAnalyzer {
       return { isOrphan: false, reason: frameworkInfo };
     }
 
-    // Otherwise, it's likely a true orphan
+    // If it's a migration/seed file, NOT orphan
+    if (this.isMigrationOrSeedFile(dep.path)) {
+      return { isOrphan: false, reason: 'Migration/Seed file (run by ORM/CLI)' };
+    }
+
+    // If it's a serverless function, NOT orphan
+    if (this.isServerlessFunction(dep.path)) {
+      return { isOrphan: false, reason: 'Serverless function (loaded by platform)' };
+    }
+
+    // If it's in a scripts directory, NOT orphan
+    if (this.isScriptFile(dep.path)) {
+      return { isOrphan: false, reason: 'Script file (run via npm/CLI)' };
+    }
+
+    // If it's a database model/schema file, NOT orphan
+    if (this.isDatabaseFile(dep.path)) {
+      return { isOrphan: false, reason: 'Database model/schema (used by ORM)' };
+    }
+
+    // If it's a constants/config export file, NOT orphan
+    if (this.isConstantsFile(dep.path)) {
+      return { isOrphan: false, reason: 'Constants/config file (may be imported dynamically)' };
+    }
+
+    // Otherwise, it's likely a true orphan - completely disconnected
     return { 
       isOrphan: true, 
-      reason: hasImports 
-        ? 'Orphan: imports files but nothing imports this file' 
-        : 'Orphan: no imports and not imported by any file'
+      reason: 'Orphan: no imports and not imported by any file'
     };
+  }
+
+  // Check if file is a migration or seed file
+  private isMigrationOrSeedFile(filePath: string): boolean {
+    const patterns = [
+      /(^|\/)migrations?\//i,
+      /(^|\/)seeds?\//i,
+      /(^|\/)seeders?\//i,
+      /(^|\/)fixtures?\//i,
+      /\d{4,}_.*\.(js|ts)$/i,  // Timestamped migrations like 20240101_init.ts
+      /migrate\.(js|ts)$/i,
+    ];
+    return patterns.some(pattern => pattern.test(filePath));
+  }
+
+  // Check if file is a serverless function
+  private isServerlessFunction(filePath: string): boolean {
+    const patterns = [
+      // Vercel serverless functions (api folder at root, not in src)
+      /^api\/.*\.(js|ts)$/i,
+      // Vercel/generic functions folder
+      /(^|\/)functions\/.*\.(js|ts)$/i,
+      // Netlify functions
+      /(^|\/)netlify\/functions\//i,
+      // AWS Lambda
+      /(^|\/)lambda\//i,
+      // Edge functions
+      /(^|\/)edge-functions?\//i,
+      // Supabase functions
+      /(^|\/)supabase\/functions\//i,
+      // Firebase functions
+      /(^|\/)firebase\/functions\//i,
+    ];
+    return patterns.some(pattern => pattern.test(filePath));
+  }
+
+  // Check if file is in scripts directory
+  private isScriptFile(filePath: string): boolean {
+    const patterns = [
+      /(^|\/)scripts?\//i,
+      /(^|\/)tools?\//i,
+      /(^|\/)tasks?\//i,
+      /(^|\/)build\//i,
+      /scripts?\.(js|ts|mjs)$/i,
+    ];
+    return patterns.some(pattern => pattern.test(filePath));
+  }
+
+  // Check if file is a database schema/ORM file (loaded by ORM tools, not imports)
+  private isDatabaseFile(filePath: string): boolean {
+    const patterns = [
+      // Prisma schema and migrations
+      /(^|\/)prisma\//i,
+      // Sequelize migrations/seeders
+      /(^|\/)sequelize\//i,
+      // TypeORM migrations
+      /(^|\/)typeorm\//i,
+      // Knex migrations
+      /(^|\/)knex\//i,
+      // Drizzle schema
+      /\.schema\.(js|ts)$/i,
+      // Entity files for TypeORM
+      /\.entity\.(js|ts)$/i,
+    ];
+    return patterns.some(pattern => pattern.test(filePath));
+  }
+
+  // Check if file is an environment/config bootstrap file
+  private isConstantsFile(filePath: string): boolean {
+    const patterns = [
+      // Environment setup files
+      /(^|\/)env\.(js|ts)$/i,
+      /env\.local\.(js|ts)$/i,
+      /environment\.(js|ts)$/i,
+      // i18n/locale files (loaded by i18n libraries)
+      /(^|\/)locales?\//i,
+      /(^|\/)i18n\//i,
+      /(^|\/)translations?\//i,
+      // Theme files
+      /(^|\/)theme\.(js|ts)$/i,
+      /(^|\/)themes?\//i,
+    ];
+    return patterns.some(pattern => pattern.test(filePath));
   }
 
   // Check if file is in a static/public directory
@@ -227,14 +336,16 @@ export class DependencyAnalyzer {
     return !filePath.includes('/');
   }
 
-  // Check if file is a script or worker
+  // Check if file is a web worker or service worker
   private isScriptOrWorker(filePath: string): boolean {
     const patterns = [
+      /\.worker\.(js|ts|mjs)$/i,
       /worker\.(js|ts|mjs)$/i,
       /sw\.(js|ts|mjs)$/i,
       /service-worker\.(js|ts|mjs)$/i,
       /serviceWorker\.(js|ts|mjs)$/i,
-      /script\.(js|ts|mjs)$/i,
+      /worklet\.(js|ts|mjs)$/i,
+      /(^|\/)workers?\//i,
       /loader\.(js|ts|mjs)$/i,
       /bootstrap\.(js|ts|mjs)$/i,
       /polyfill/i,
@@ -328,12 +439,18 @@ export class DependencyAnalyzer {
   private extractImports(content: string, filePath: string): ImportInfo[] {
     const imports: ImportInfo[] = [];
 
-    // ES6 import patterns
+    // Remove comments to avoid false matches
+    const cleanContent = content
+      .replace(/\/\*[\s\S]*?\*\//g, '') // Multi-line comments
+      .replace(/\/\/.*$/gm, '');         // Single-line comments
+
+    // ES6 import patterns - use [^;]* to avoid matching across statements
     const importPatterns = [
       // import X from 'module'
       // import { X } from 'module'
       // import * as X from 'module'
-      /import\s+(?:(?:\*\s+as\s+\w+)|(?:{\s*[^}]+\s*})|(?:\w+))?\s*,?\s*(?:(?:\*\s+as\s+\w+)|(?:{\s*[^}]+\s*})|(?:\w+))?\s*from\s+['"]([^'"]+)['"]/g,
+      // Handles multi-line imports by matching until 'from'
+      /import\s+[^;]*?\s+from\s+['"]([^'"]+)['"]/g,
       
       // import 'module' (side-effect imports)
       /import\s+['"]([^'"]+)['"]/g,
@@ -345,15 +462,18 @@ export class DependencyAnalyzer {
       /require\s*\(\s*['"]([^'"]+)['"]\s*\)/g,
       
       // export { X } from 'module'
-      /export\s+(?:\*|{[^}]*})\s+from\s+['"]([^'"]+)['"]/g,
+      /export\s+[^;]*?\s+from\s+['"]([^'"]+)['"]/g,
     ];
 
     for (const pattern of importPatterns) {
       let match;
-      while ((match = pattern.exec(content)) !== null) {
+      while ((match = pattern.exec(cleanContent)) !== null) {
         const source = match[1];
-        // Track local imports (., /) and path aliases (@/, ~/, #/)
-        if (source.startsWith('.') || source.startsWith('/') || source.startsWith('@/') || source.startsWith('~/') || source.startsWith('#/')) {
+        // Track local imports (., /) and path aliases (@/, ~/, #/, @)
+        // Also handle @components, @utils etc. without slash
+        if (source.startsWith('.') || source.startsWith('/') || 
+            source.startsWith('@/') || source.startsWith('~/') || source.startsWith('#/') ||
+            /^@[a-zA-Z]/.test(source)) {
           imports.push({
             source,
             resolved: null,
@@ -383,7 +503,19 @@ export class DependencyAnalyzer {
         // Fallback: try treating alias as relative to closest parent with src
         resolved = importSource.replace(/^[@~#]\//, 'src/');
       }
-    } else {
+    } 
+    // Handle aliases like @store, @components (without slash)
+    else if (/^@[a-zA-Z]/.test(importSource)) {
+      const srcFolder = this.findSrcFolder(fromFile, allPaths);
+      // Convert @store/authStore to src/store/authStore
+      const aliasPath = importSource.replace(/^@/, '');
+      if (srcFolder) {
+        resolved = srcFolder + '/' + aliasPath;
+      } else {
+        resolved = 'src/' + aliasPath;
+      }
+    }
+    else {
       resolved = path.posix.join(fromDir, importSource);
     }
     

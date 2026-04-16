@@ -46,9 +46,10 @@ router.post('/analyze', async (req: Request, res: Response) => {
 
     // Fetch files from GitHub (with optional user token)
     const githubService = new GitHubService(githubToken);
-    const files = await githubService.fetchRepoFiles(repoInfo.owner, repoInfo.repo);
+    const fetchResult = await githubService.fetchRepoFiles(repoInfo.owner, repoInfo.repo);
+    const files = fetchResult.files;
 
-    console.log(`📁 Found ${files.length} JS/TS files`);
+    console.log(`📁 Found ${fetchResult.totalFound} JS/TS files, fetched ${fetchResult.successfullyFetched}`);
 
     // Analyze dependencies
     const analyzer = new DependencyAnalyzer();
@@ -69,7 +70,9 @@ router.post('/analyze', async (req: Request, res: Response) => {
 
     const result = {
       repoInfo,
-      totalFiles: files.length,
+      totalFiles: fetchResult.totalFound,
+      fetchedFiles: fetchResult.successfullyFetched,
+      failedFiles: fetchResult.failedToFetch,
       analyzedFiles: dependencies.length,
       dependencies,
       orphanFiles,
@@ -77,19 +80,39 @@ router.post('/analyze', async (req: Request, res: Response) => {
       nodes,
       edges,
       rateLimit: githubService.rateLimit,
+      warning: fetchResult.warning,
     };
 
     console.log(`✅ Analysis complete: ${orphanFiles.length} orphan files found`);
     if (githubService.rateLimit) {
       console.log(`📊 Rate limit: ${githubService.rateLimit.remaining}/${githubService.rateLimit.limit} remaining`);
     }
+    if (fetchResult.warning) {
+      console.warn(`⚠️ Warning: ${fetchResult.warning}`);
+    }
 
     res.json(result);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Analysis error:', error);
-    res.status(500).json({ 
-      error: error instanceof Error ? error.message : 'Failed to analyze repository' 
-    });
+    
+    // Provide better error messages based on error type
+    let errorMessage = 'Failed to analyze repository';
+    let statusCode = 500;
+    
+    if (error?.status === 403 || error?.message?.includes('rate limit')) {
+      statusCode = 403;
+      errorMessage = 'GitHub API rate limit exceeded. Please add a GitHub personal access token in the settings to get 5,000 requests/hour instead of 60.';
+    } else if (error?.status === 404 || error?.message?.includes('Not Found')) {
+      statusCode = 404;
+      errorMessage = 'Repository not found. Please check the URL and make sure the repository exists and is public.';
+    } else if (error?.status === 401) {
+      statusCode = 401;
+      errorMessage = 'GitHub authentication failed. Please check your personal access token.';
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
+    }
+    
+    res.status(statusCode).json({ error: errorMessage });
   }
 });
 

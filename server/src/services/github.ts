@@ -7,6 +7,14 @@ export interface RateLimitInfo {
   reset: Date;
 }
 
+export interface FetchResult {
+  files: RepoFile[];
+  totalFound: number;
+  successfullyFetched: number;
+  failedToFetch: number;
+  warning?: string;
+}
+
 export class GitHubService {
   private octokit: Octokit;
   public rateLimit: RateLimitInfo | null = null;
@@ -47,7 +55,7 @@ export class GitHubService {
   }
 
   // Fetch all JS/TS files from a repository using Git Blob API (more efficient)
-  async fetchRepoFiles(owner: string, repo: string): Promise<RepoFile[]> {
+  async fetchRepoFiles(owner: string, repo: string): Promise<FetchResult> {
     const files: RepoFile[] = [];
     
     // Get the repository tree recursively
@@ -93,10 +101,23 @@ export class GitHubService {
     });
 
     console.log(`📂 Fetching content for ${supportedFiles.length} files...`);
+    
+    // Check rate limit before starting
+    if (this.rateLimit && this.rateLimit.remaining < supportedFiles.length + 5) {
+      const resetTime = this.rateLimit.reset.toLocaleTimeString();
+      console.warn(`⚠️ Rate limit low: ${this.rateLimit.remaining} remaining, need ~${supportedFiles.length}`);
+      console.warn(`⚠️ Rate limit resets at: ${resetTime}`);
+      
+      if (this.rateLimit.remaining < 10) {
+        throw new Error(`GitHub API rate limit exceeded. Only ${this.rateLimit.remaining} requests remaining. Resets at ${resetTime}. Please add a GitHub token for 5000 requests/hour.`);
+      }
+    }
 
     // Use Git Blob API - more efficient than content API
-    // Fetch in parallel batches
-    const batchSize = 15;
+    // Fetch in parallel batches with delay to avoid rate limiting
+    const batchSize = 10; // Reduced batch size
+    const batchDelay = 100; // ms delay between batches
+    
     for (let i = 0; i < supportedFiles.length; i += batchSize) {
       const batch = supportedFiles.slice(i, i + batchSize);
       
@@ -116,8 +137,15 @@ export class GitHubService {
               content: Buffer.from(data.content, 'base64').toString('utf-8'),
               sha: item.sha!,
             };
-          } catch (error) {
-            console.warn(`⚠️ Failed to fetch: ${item.path}`);
+          } catch (error: any) {
+            // Log more detailed error info
+            if (error?.status === 403) {
+              console.error(`❌ Rate limit hit while fetching: ${item.path}`);
+            } else if (error?.status === 404) {
+              console.warn(`⚠️ File not found: ${item.path}`);
+            } else {
+              console.warn(`⚠️ Failed to fetch: ${item.path} (${error?.message || 'unknown error'})`);
+            }
           }
           return null;
         })
@@ -125,10 +153,42 @@ export class GitHubService {
 
       files.push(...batchResults.filter((f): f is RepoFile => f !== null));
       
-      // Log progress
-      console.log(`📊 Progress: ${Math.min(i + batchSize, supportedFiles.length)}/${supportedFiles.length} files`);
+      // Log progress with rate limit info
+      const remaining = this.rateLimit?.remaining || 'unknown';
+      console.log(`📊 Progress: ${Math.min(i + batchSize, supportedFiles.length)}/${supportedFiles.length} files (API calls remaining: ${remaining})`);
+      
+      // Small delay between batches to be gentle on API
+      if (i + batchSize < supportedFiles.length) {
+        await new Promise(resolve => setTimeout(resolve, batchDelay));
+      }
+    }
+    
+    // Calculate stats
+    const totalFound = supportedFiles.length;
+    const successfullyFetched = files.length;
+    const failedToFetch = totalFound - successfullyFetched;
+    const successRate = ((successfullyFetched / totalFound) * 100).toFixed(1);
+    
+    console.log(`✅ Successfully fetched ${successfullyFetched}/${totalFound} files (${successRate}%)`);
+    
+    // Build warning message if many files failed
+    let warning: string | undefined;
+    if (failedToFetch > 0) {
+      if (successfullyFetched < totalFound * 0.5) {
+        warning = `Only ${successfullyFetched} of ${totalFound} files were fetched (${successRate}%). This is likely due to GitHub API rate limiting. Please add a GitHub personal access token to get 5000 requests/hour instead of 60.`;
+        console.warn(`⚠️ ${warning}`);
+      } else if (failedToFetch > 5) {
+        warning = `${failedToFetch} files could not be fetched. Results may be incomplete.`;
+        console.warn(`⚠️ ${warning}`);
+      }
     }
 
-    return files;
+    return {
+      files,
+      totalFound,
+      successfullyFetched,
+      failedToFetch,
+      warning,
+    };
   }
 }

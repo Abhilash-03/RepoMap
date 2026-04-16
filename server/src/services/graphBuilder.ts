@@ -19,6 +19,7 @@ export class GraphBuilder {
         type: dep.isEntryPoint ? 'input' : (dep.imports.length === 0 ? 'output' : 'default'),
         data: {
           label: this.getShortLabel(dep.path),
+          fullPath: dep.path,
           isOrphan: dep.isOrphan,
           isEntryPoint: dep.isEntryPoint,
           importCount: dep.imports.length,
