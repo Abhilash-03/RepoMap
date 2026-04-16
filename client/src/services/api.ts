@@ -26,21 +26,14 @@ export interface RateLimitInfo {
 
 export async function checkRateLimit(token?: string): Promise<RateLimitInfo> {
   const authToken = token || getStoredGitHubToken();
-  const headers: Record<string, string> = {
-    'Accept': 'application/vnd.github.v3+json',
-  };
+  const headers: Record<string, string> = {};
+  
   if (authToken) {
-    headers['Authorization'] = `Bearer ${authToken}`;
+    headers['x-github-token'] = authToken;
   }
   
-  const response = await axios.get('https://api.github.com/rate_limit', { headers });
-  const core = response.data.resources.core;
-  return {
-    limit: core.limit,
-    remaining: core.remaining,
-    reset: core.reset,
-    used: core.used,
-  };
+  const response = await axios.get<RateLimitInfo>(`${API_BASE_URL}/api/rate-limit`, { headers });
+  return response.data;
 }
 
 export async function analyzeRepository(repoUrl: string, githubToken?: string): Promise<AnalysisResult> {

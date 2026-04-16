@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { analyzeRoute } from './routes/analyze.js';
+import { rateLimitRoute } from './routes/rateLimit.js';
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api', analyzeRoute);
+app.use('/api', rateLimitRoute);
 
 // Health check
 app.get('/health', (req, res) => {
