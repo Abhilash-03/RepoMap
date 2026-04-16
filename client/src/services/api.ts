@@ -44,9 +44,31 @@ export async function checkRateLimit(token?: string): Promise<RateLimitInfo> {
 }
 
 export async function analyzeRepository(repoUrl: string, githubToken?: string): Promise<AnalysisResult> {
-  const response = await axios.post<AnalysisResult>(`${API_BASE_URL}/api/analyze`, {
-    repoUrl,
-    githubToken: githubToken || getStoredGitHubToken() || undefined,
-  });
-  return response.data;
+  try {
+    const response = await axios.post<AnalysisResult>(`${API_BASE_URL}/api/analyze`, {
+      repoUrl,
+      githubToken: githubToken || getStoredGitHubToken() || undefined,
+    });
+    return response.data;
+  } catch (err) {
+    // Extract meaningful error message from axios error
+    const error = err as { response?: { data?: { error?: string }; status?: number }; code?: string; message?: string };
+    
+    if (error.response?.data?.error) {
+      // Server returned an error message
+      throw new Error(error.response.data.error);
+    } else if (error.response?.status === 403) {
+      throw new Error('GitHub API rate limit exceeded. Please add a GitHub personal access token to continue.');
+    } else if (error.response?.status === 404) {
+      throw new Error('Repository not found. Please check the URL and make sure the repository is public.');
+    } else if (error.response?.status === 500) {
+      throw new Error('Server error occurred while analyzing the repository. Please try again later.');
+    } else if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
+      throw new Error('Request timed out. The repository might be too large. Try adding a GitHub token for faster access.');
+    } else if (error.code === 'ERR_NETWORK' || !error.response) {
+      throw new Error('Unable to connect to the server. Please check your internet connection and try again.');
+    } else {
+      throw new Error(error.message || 'Failed to analyze repository. Please try again.');
+    }
+  }
 }

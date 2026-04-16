@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 
 interface NodeData {
   label: string;
+  fullPath: string;
   isOrphan: boolean;
   isEntryPoint: boolean;
   importCount: number;

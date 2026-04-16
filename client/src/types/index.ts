@@ -19,6 +19,7 @@ export interface GraphNode {
   type: 'default' | 'input' | 'output';
   data: {
     label: string;
+    fullPath: string;
     isOrphan: boolean;
     isEntryPoint: boolean;
     importCount: number;
@@ -46,6 +47,8 @@ export interface RateLimitInfo {
 export interface AnalysisResult {
   repoInfo: RepoInfo;
   totalFiles: number;
+  fetchedFiles?: number;
+  failedFiles?: number;
   analyzedFiles: number;
   dependencies: FileDependency[];
   orphanFiles: string[];
@@ -53,4 +56,5 @@ export interface AnalysisResult {
   nodes: GraphNode[];
   edges: GraphEdge[];
   rateLimit: RateLimitInfo | null;
+  warning?: string;
 }

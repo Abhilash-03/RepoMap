@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AlertCircle, Info } from 'lucide-react';
+import { AlertCircle, Info, Key, RefreshCw, ExternalLink } from 'lucide-react';
 import DependencyGraph from '@/components/DependencyGraph';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
@@ -13,6 +13,7 @@ import { analyzeRepository, getStoredGitHubToken } from '@/services/api';
 import type { AnalysisResult } from '@/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 function App() {
@@ -56,6 +57,7 @@ function App() {
         <DependencyGraph
           nodes={result.nodes}
           edges={result.edges}
+          dependencies={result.dependencies}
           isFullScreen={true}
           onToggleFullScreen={() => setIsFullScreen(false)}
         />
@@ -115,11 +117,68 @@ function App() {
           {/* Error */}
           {error && (
             <Card className="mb-8 border-red-200 bg-red-50">
-              <CardContent className="pt-6 flex items-start gap-3">
-                <AlertCircle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
-                <div>
-                  <p className="font-medium text-red-700">Analysis Failed</p>
-                  <p className="text-sm text-red-600">{error}</p>
+              <CardContent className="pt-6">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="h-5 w-5 text-red-500 shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="font-medium text-red-700">Analysis Failed</p>
+                    <p className="text-sm text-red-600 mt-1">{error}</p>
+                    
+                    {/* Helpful suggestions based on error type */}
+                    {error.toLowerCase().includes('rate limit') && (
+                      <div className="mt-4 p-3 bg-white/60 rounded-lg border border-red-100">
+                        <p className="text-sm font-medium text-red-800 flex items-center gap-2">
+                          <Key className="h-4 w-4" />
+                          How to fix this:
+                        </p>
+                        <ol className="mt-2 text-sm text-red-700 list-decimal list-inside space-y-1">
+                          <li>Go to GitHub → Settings → Developer settings → Personal access tokens</li>
+                          <li>Generate a new token (classic) - no scopes needed for public repos</li>
+                          <li>Click the key icon in the header to add your token</li>
+                        </ol>
+                        <a 
+                          href="https://github.com/settings/tokens/new" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 mt-3 text-sm text-violet-600 hover:text-violet-700 font-medium"
+                        >
+                          Create token on GitHub <ExternalLink className="h-3 w-3" />
+                        </a>
+                      </div>
+                    )}
+                    
+                    {error.toLowerCase().includes('not found') && (
+                      <div className="mt-4 p-3 bg-white/60 rounded-lg border border-red-100">
+                        <p className="text-sm font-medium text-red-800">Please check:</p>
+                        <ul className="mt-2 text-sm text-red-700 list-disc list-inside space-y-1">
+                          <li>The repository URL is correct</li>
+                          <li>The repository is public (private repos need authentication)</li>
+                          <li>The repository exists and hasn't been deleted</li>
+                        </ul>
+                      </div>
+                    )}
+                    
+                    {error.toLowerCase().includes('connect') && (
+                      <div className="mt-4 p-3 bg-white/60 rounded-lg border border-red-100">
+                        <p className="text-sm font-medium text-red-800">Connection issue:</p>
+                        <ul className="mt-2 text-sm text-red-700 list-disc list-inside space-y-1">
+                          <li>Check your internet connection</li>
+                          <li>The server might be temporarily unavailable</li>
+                          <li>Try again in a few moments</li>
+                        </ul>
+                      </div>
+                    )}
+                    
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="mt-4 text-red-600 border-red-200 hover:bg-red-100"
+                      onClick={() => setError(null)}
+                    >
+                      <RefreshCw className="h-4 w-4 mr-2" />
+                      Dismiss & Try Again
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>

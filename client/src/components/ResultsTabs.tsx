@@ -42,6 +42,7 @@ function ResultsTabs({ result, onToggleFullScreen }: ResultsTabsProps) {
           <DependencyGraph
             nodes={result.nodes}
             edges={result.edges}
+            dependencies={result.dependencies}
             isFullScreen={false}
             onToggleFullScreen={onToggleFullScreen}
           />

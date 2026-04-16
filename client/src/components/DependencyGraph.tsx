@@ -11,7 +11,7 @@ import {
 } from "@xyflow/react";
 import type { Node, Edge } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import type { GraphNode, GraphEdge } from "@/types";
+import type { GraphNode, GraphEdge, FileDependency } from "@/types";
 import { getLayoutedElements } from "@/lib/elk-layout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,6 +28,9 @@ import {
   Play,
   ArrowDownToLine,
   ArrowUpFromLine,
+  FolderOpen,
+  Copy,
+  Check,
 } from "lucide-react";
 import CustomNode from "./CustomNode";
 import { cn } from "@/lib/utils";
@@ -35,6 +38,7 @@ import { cn } from "@/lib/utils";
 interface DependencyGraphProps {
   nodes: GraphNode[];
   edges: GraphEdge[];
+  dependencies?: FileDependency[];
   isFullScreen?: boolean;
   onToggleFullScreen?: () => void;
   onNodeClick?: (nodeId: string) => void;
@@ -47,6 +51,7 @@ const nodeTypes = {
 export default function DependencyGraph({
   nodes: initialNodes,
   edges: initialEdges,
+  dependencies = [],
   isFullScreen = false,
   onToggleFullScreen,
   onNodeClick,
@@ -56,6 +61,19 @@ export default function DependencyGraph({
   const [isLayouting, setIsLayouting] = useState(true);
   const [direction, setDirection] = useState<"DOWN" | "RIGHT">("DOWN");
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
+  const [copiedPath, setCopiedPath] = useState<string | null>(null);
+
+  // Get full dependency info for selected node
+  const selectedDependency = selectedNode 
+    ? dependencies.find(d => d.path === selectedNode.data.fullPath) 
+    : null;
+
+  // Copy path to clipboard
+  const copyToClipboard = (path: string) => {
+    navigator.clipboard.writeText(path);
+    setCopiedPath(path);
+    setTimeout(() => setCopiedPath(null), 2000);
+  };
 
   // Apply ELK layout
   const applyLayout = useCallback(
@@ -269,7 +287,7 @@ export default function DependencyGraph({
       {/* Mobile detail panel - shows on tap */}
       {selectedNode && (
         <div className="absolute bottom-0 left-0 right-0 z-20 bg-white border-t border-slate-200 shadow-lg animate-in slide-in-from-bottom duration-200">
-          <div className="p-3 sm:p-4">
+          <div className="p-3 sm:p-4 max-h-[60vh] overflow-y-auto">
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-start gap-3 min-w-0 flex-1">
                 <div
@@ -292,12 +310,32 @@ export default function DependencyGraph({
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h3 className="font-semibold text-slate-900 truncate text-sm sm:text-base">
+                  <h3 className="font-semibold text-slate-900 text-sm sm:text-base">
                     {selectedNode.data.label}
                   </h3>
 
+                  {/* Full path with copy button */}
+                  <div className="mt-1 flex items-center gap-2">
+                    <div className="flex items-center gap-1.5 text-xs text-slate-500 bg-slate-50 rounded px-2 py-1 max-w-full overflow-hidden">
+                      <FolderOpen className="h-3 w-3 shrink-0" />
+                      <span className="truncate font-mono">{selectedNode.data.fullPath}</span>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6 shrink-0"
+                      onClick={() => copyToClipboard(selectedNode.data.fullPath)}
+                    >
+                      {copiedPath === selectedNode.data.fullPath ? (
+                        <Check className="h-3 w-3 text-green-600" />
+                      ) : (
+                        <Copy className="h-3 w-3" />
+                      )}
+                    </Button>
+                  </div>
+
                   {/* Status badge */}
-                  <div className="mt-1">
+                  <div className="mt-2">
                     {selectedNode.data.isOrphan && (
                       <Badge variant="destructive" className="text-xs">
                         Orphan File
@@ -317,22 +355,9 @@ export default function DependencyGraph({
                       )}
                   </div>
 
-                  {/* Stats */}
-                  <div className="flex items-center gap-4 mt-2 text-xs sm:text-sm text-slate-600">
-                    <span className="flex items-center gap-1">
-                      <ArrowDownToLine className="h-3.5 w-3.5" />
-                      <strong>{selectedNode.data.importCount}</strong> imports
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <ArrowUpFromLine className="h-3.5 w-3.5" />
-                      <strong>{selectedNode.data.importedByCount}</strong>{" "}
-                      imported by
-                    </span>
-                  </div>
-
                   {/* Status reason */}
                   {selectedNode.data.statusReason && (
-                    <p className="mt-2 text-xs sm:text-sm text-slate-500 bg-slate-50 rounded px-2 py-1">
+                    <p className="mt-2 text-xs text-slate-500 bg-slate-50 rounded px-2 py-1">
                       {selectedNode.data.statusReason}
                     </p>
                   )}
@@ -348,6 +373,81 @@ export default function DependencyGraph({
                 <X className="h-4 w-4" />
               </Button>
             </div>
+
+            {/* Imports section */}
+            {selectedDependency && selectedDependency.imports.length > 0 && (
+              <div className="mt-4 pt-3 border-t border-slate-200">
+                <div className="flex items-center gap-2 text-xs font-medium text-slate-700 mb-2">
+                  <ArrowDownToLine className="h-3.5 w-3.5 text-blue-500" />
+                  <span>Imports ({selectedDependency.imports.length} files)</span>
+                </div>
+                <div className="space-y-1 max-h-32 overflow-y-auto">
+                  {selectedDependency.imports.map((importPath, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center justify-between gap-2 text-xs bg-blue-50 rounded px-2 py-1.5 group hover:bg-blue-100 transition-colors"
+                    >
+                      <span className="font-mono text-blue-700 truncate">{importPath}</span>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-5 w-5 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+                        onClick={() => copyToClipboard(importPath)}
+                      >
+                        {copiedPath === importPath ? (
+                          <Check className="h-3 w-3 text-green-600" />
+                        ) : (
+                          <Copy className="h-3 w-3" />
+                        )}
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Imported By section */}
+            {selectedDependency && selectedDependency.importedBy.length > 0 && (
+              <div className="mt-4 pt-3 border-t border-slate-200">
+                <div className="flex items-center gap-2 text-xs font-medium text-slate-700 mb-2">
+                  <ArrowUpFromLine className="h-3.5 w-3.5 text-emerald-500" />
+                  <span>Imported By ({selectedDependency.importedBy.length} files)</span>
+                </div>
+                <div className="space-y-1 max-h-32 overflow-y-auto">
+                  {selectedDependency.importedBy.map((importedByPath, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center justify-between gap-2 text-xs bg-emerald-50 rounded px-2 py-1.5 group hover:bg-emerald-100 transition-colors"
+                    >
+                      <span className="font-mono text-emerald-700 truncate">{importedByPath}</span>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-5 w-5 opacity-0 group-hover:opacity-100 transition-opacity shrink-0"
+                        onClick={() => copyToClipboard(importedByPath)}
+                      >
+                        {copiedPath === importedByPath ? (
+                          <Check className="h-3 w-3 text-green-600" />
+                        ) : (
+                          <Copy className="h-3 w-3" />
+                        )}
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* No connections message */}
+            {selectedDependency && 
+              selectedDependency.imports.length === 0 && 
+              selectedDependency.importedBy.length === 0 && (
+              <div className="mt-4 pt-3 border-t border-slate-200">
+                <p className="text-xs text-slate-500 text-center py-2">
+                  This file has no direct import connections.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       )}
