@@ -9,6 +9,7 @@ import ResultsTabs from '@/components/ResultsTabs';
 import FeatureCards from '@/components/FeatureCards';
 import ApiInfoSection from '@/components/ApiInfoSection';
 import Footer from '@/components/Footer';
+import AnalysisProgress from '@/components/AnalysisProgress';
 import { analyzeRepository, getStoredGitHubToken } from '@/services/api';
 import type { AnalysisResult } from '@/types';
 import { Card, CardContent } from '@/components/ui/card';
@@ -81,7 +82,7 @@ function App() {
           />
 
           {/* Token Warning */}
-          {!getStoredGitHubToken() && !result && (
+          {!getStoredGitHubToken() && !result && !isLoading && (
             <Card className="mb-8 max-w-2xl mx-auto border-amber-200 bg-amber-50">
               <CardContent className="pt-4 pb-4 flex items-center gap-3">
                 <Info className="h-5 w-5 text-amber-500 shrink-0" />
@@ -94,6 +95,9 @@ function App() {
               </CardContent>
             </Card>
           )}
+
+          {/* Analysis Progress */}
+          {isLoading && <AnalysisProgress repoUrl={repoUrl} />}
 
           {/* Rate Limit Info */}
           {result?.rateLimit && (
