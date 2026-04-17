@@ -84,7 +84,7 @@ function DocsContent() {
               <div className="h-8 w-8 rounded-full bg-violet-100 flex items-center justify-center shrink-0 font-bold text-violet-600">2</div>
               <div>
                 <h4 className="font-semibold text-slate-900 mb-1">Paste and Analyze</h4>
-                <p className="text-slate-600 text-sm">Paste the URL into RepoMap's search bar and click "Analyze". The tool will fetch and analyze all JavaScript/TypeScript files.</p>
+                <p className="text-slate-600 text-sm">Paste the URL into RepoMap's search bar and click "Analyze". You'll see a real-time progress indicator showing each step: connecting to GitHub, fetching files, analyzing dependencies, and building the graph.</p>
               </div>
             </div>
 
@@ -732,7 +732,7 @@ import '@/utils'  →  packages/web/src/utils/index.ts`} />
         {/* API Reference */}
         <Section id="api-reference" title="API Reference">
           <p className="text-slate-600 mb-6">
-            The backend exposes a single endpoint for repository analysis:
+            The backend exposes the following REST API endpoints:
           </p>
 
           <div className="border rounded-lg overflow-hidden">
@@ -775,6 +775,28 @@ import '@/utils'  →  packages/web/src/utils/index.ts`} />
     "remaining": 4990,
     "reset": "2024-01-01T00:00:00Z"
   }
+}`} language="json" />
+            </div>
+          </div>
+
+          <div className="border rounded-lg overflow-hidden mt-6">
+            <div className="bg-slate-800 text-white p-4 flex items-center gap-3">
+              <Badge className="bg-blue-500">GET</Badge>
+              <code className="font-mono">/api/rate-limit</code>
+            </div>
+            <div className="p-4">
+              <h4 className="font-semibold text-slate-900 mb-2">Description</h4>
+              <p className="text-sm text-slate-600 mb-4">Check your current GitHub API rate limit status. Useful for monitoring remaining requests.</p>
+
+              <h4 className="font-semibold text-slate-900 mb-2">Headers (Optional)</h4>
+              <CodeBlock code={`x-github-token: ghp_xxxx  // Your GitHub token for authenticated limits`} language="text" />
+
+              <h4 className="font-semibold text-slate-900 mb-2 mt-4">Response</h4>
+              <CodeBlock code={`{
+  "limit": 5000,      // 60 without token, 5000 with token
+  "remaining": 4990,  // Requests remaining
+  "reset": 1704067200, // Unix timestamp when limit resets
+  "used": 10          // Requests used in current window
 }`} language="json" />
             </div>
           </div>
