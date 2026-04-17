@@ -13,12 +13,12 @@ A powerful, zero-setup dependency visualization tool for JavaScript/TypeScript r
 - 🔗 **Bidirectional Tracking** - See both imports and imported-by relationships
 
 ### Framework Support
-- ⚛️ **React / Vite** - Standard React applications
+- ⚛️ **React / Vite** - Full support for standard React applications
 - ⬛ **Next.js** - App Router & Pages Router, API routes, middleware
-- 💚 **Vue / Nuxt.js** - Pages, layouts, server routes
-- 🎸 **Remix** - File-based routing
-- 🧡 **SvelteKit** - +page, +layout, +server files
-- 🚀 **Astro** - Pages and layouts
+- 🎸 **Remix** - File-based routing, entry files
+- 📦 **Node.js / Express** - Backend JS/TS projects
+
+> **Note:** Vue (.vue), Svelte (.svelte), and Astro (.astro) single-file components are not yet analyzed. Only their companion JS/TS files are supported.
 
 ### Smart Detection
 - 📁 **Path Alias Resolution** - Supports `@/`, `~/`, `#/` aliases
@@ -30,6 +30,7 @@ A powerful, zero-setup dependency visualization tool for JavaScript/TypeScript r
 ### User Experience
 - 📱 **Mobile Responsive** - Full touch support with tap-to-view details
 - 🌙 **Full Screen Mode** - Distraction-free graph exploration
+- ⏳ **Progress Indicator** - Real-time analysis progress with step-by-step feedback
 - 🔑 **GitHub Token Settings** - Configure API tokens with rate limit display
 - 📖 **Comprehensive Docs** - Built-in documentation at `/docs`
 
@@ -141,6 +142,23 @@ Content-Type: application/json
   "nodes": [...],
   "edges": [...],
   "rateLimit": { "remaining": 4999, "limit": 5000 }
+}
+```
+
+### Check Rate Limit
+
+```http
+GET /api/rate-limit
+x-github-token: optional_token
+```
+
+**Response:**
+```json
+{
+  "limit": 5000,
+  "remaining": 4990,
+  "reset": 1704067200,
+  "used": 10
 }
 ```
 
