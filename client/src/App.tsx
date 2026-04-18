@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { AlertCircle, Info, Key, RefreshCw, ExternalLink } from 'lucide-react';
 import DependencyGraph from '@/components/DependencyGraph';
 import Header from '@/components/Header';
@@ -49,20 +50,23 @@ function App() {
   // Full screen graph view
   if (isFullScreen && result) {
     return (
-      <div className="fixed inset-0 z-50 bg-slate-900">
-        <div className="absolute bottom-4 right-1 md:left-12 z-10">
-          <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm text-xs sm:text-sm max-w-full truncate">
-            {result.repoInfo.owner}/{result.repoInfo.repo}
-          </Badge>
+      <>
+        <div className="fixed inset-0 z-50 bg-slate-900">
+          <div className="absolute bottom-4 right-1 md:left-12 z-10">
+            <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm text-xs sm:text-sm max-w-full truncate">
+              {result.repoInfo.owner}/{result.repoInfo.repo}
+            </Badge>
+          </div>
+          <DependencyGraph
+            nodes={result.nodes}
+            edges={result.edges}
+            dependencies={result.dependencies}
+            isFullScreen={true}
+            onToggleFullScreen={() => setIsFullScreen(false)}
+          />
         </div>
-        <DependencyGraph
-          nodes={result.nodes}
-          edges={result.edges}
-          dependencies={result.dependencies}
-          isFullScreen={true}
-          onToggleFullScreen={() => setIsFullScreen(false)}
-        />
-      </div>
+        <Analytics />
+      </>
     );
   }
 
@@ -206,6 +210,7 @@ function App() {
         </main>
 
       <Footer />
+      <Analytics />
     </div>
   );
 }
