@@ -20,23 +20,23 @@ export default function CustomNode({ data }: CustomNodeProps) {
   return (
     <div className={cn(
       'relative px-3 py-2.5 rounded-lg min-w-[160px] max-w-[200px] text-xs transition-all duration-200',
-      'bg-white border shadow-md hover:shadow-lg',
-      data.isOrphan && 'border-red-300 bg-red-50/50 ring-2 ring-red-100',
-      data.isEntryPoint && 'border-emerald-400 bg-emerald-50/50 ring-2 ring-emerald-100',
-      !data.isOrphan && !data.isEntryPoint && 'border-slate-200 hover:border-slate-300'
+      'bg-white dark:bg-slate-800 border shadow-md hover:shadow-lg',
+      data.isOrphan && 'border-red-300 dark:border-red-600 bg-red-50/50 dark:bg-red-900/20 ring-2 ring-red-100 dark:ring-red-900/50',
+      data.isEntryPoint && 'border-emerald-400 dark:border-emerald-600 bg-emerald-50/50 dark:bg-emerald-900/20 ring-2 ring-emerald-100 dark:ring-emerald-900/50',
+      !data.isOrphan && !data.isEntryPoint && 'border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500'
     )}>
       <Handle 
         type="target" 
         position={Position.Top} 
-        className="!bg-slate-400 !w-2 !h-2 !border-2 !border-white"
+        className="!bg-slate-400 dark:!bg-slate-500 !w-2 !h-2 !border-2 !border-white dark:!border-slate-800"
       />
       
       <div className="flex items-start gap-2">
         <div className={cn(
           'mt-0.5 p-1 rounded',
-          data.isOrphan && 'bg-red-100 text-red-600',
-          data.isEntryPoint && 'bg-emerald-100 text-emerald-600',
-          !data.isOrphan && !data.isEntryPoint && 'bg-slate-100 text-slate-500'
+          data.isOrphan && 'bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400',
+          data.isEntryPoint && 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400',
+          !data.isOrphan && !data.isEntryPoint && 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
         )}>
           {data.isOrphan ? (
             <FileWarning className="h-3.5 w-3.5" />
@@ -49,13 +49,13 @@ export default function CustomNode({ data }: CustomNodeProps) {
         
         <div className="flex-1 min-w-0">
           <div 
-            className="font-medium text-slate-800 truncate leading-tight" 
+            className="font-medium text-slate-800 dark:text-slate-100 truncate leading-tight" 
             title={data.label}
           >
             {data.label}
           </div>
           
-          <div className="flex items-center gap-3 mt-1.5 text-[10px] text-slate-500">
+          <div className="flex items-center gap-3 mt-1.5 text-[10px] text-slate-500 dark:text-slate-400">
             <span className="flex items-center gap-0.5" title="Imports">
               <ArrowDownToLine className="h-2.5 w-2.5" />
               {data.importCount}
@@ -66,7 +66,7 @@ export default function CustomNode({ data }: CustomNodeProps) {
             </span>
             {data.statusReason && (
               <span 
-                className="flex items-center gap-0.5 text-blue-500 cursor-help" 
+                className="flex items-center gap-0.5 text-blue-500 dark:text-blue-400 cursor-help" 
                 title={data.statusReason}
               >
                 <Info className="h-2.5 w-2.5" />

@@ -21,8 +21,8 @@ function DocsContent() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-10">
         {/* Introduction */}
         <Section id="introduction" title="Introduction">
-          <p className="text-lg text-slate-600 mb-6">
-            <strong className="text-slate-900">RepoMap</strong> is a powerful dependency visualization tool that helps developers understand the structure and relationships within their codebase. Simply paste a GitHub repository URL and instantly get an interactive map of file dependencies, discover orphan files, and identify entry points.
+          <p className="text-lg text-slate-600 dark:text-slate-300 mb-6">
+            <strong className="text-slate-900 dark:text-white">RepoMap</strong> is a powerful dependency visualization tool that helps developers understand the structure and relationships within their codebase. Simply paste a GitHub repository URL and instantly get an interactive map of file dependencies, discover orphan files, and identify entry points.
           </p>
 
           <div className="grid md:grid-cols-3 gap-4 my-8">
@@ -43,8 +43,8 @@ function DocsContent() {
             />
           </div>
 
-          <h3 className="text-xl font-semibold text-slate-900 mt-8 mb-4">Why RepoMap?</h3>
-          <ul className="space-y-3 text-slate-600">
+          <h3 className="text-xl font-semibold text-slate-900 dark:text-white mt-8 mb-4">Why RepoMap?</h3>
+          <ul className="space-y-3 text-slate-600 dark:text-slate-300">
             <li className="flex items-start gap-3">
               <CheckCircle2 className="h-5 w-5 text-emerald-500 mt-0.5 shrink-0" />
               <span><strong>Understand New Codebases</strong> - Quickly grasp the architecture of unfamiliar projects</span>
@@ -66,33 +66,33 @@ function DocsContent() {
 
         {/* Quick Start */}
         <Section id="quick-start" title="Quick Start">
-          <p className="text-slate-600 mb-6">
+          <p className="text-slate-600 dark:text-slate-300 mb-6">
             Getting started with RepoMap takes less than 30 seconds. Follow these simple steps:
           </p>
 
           <div className="space-y-6">
             <div className="flex gap-4">
-              <div className="h-8 w-8 rounded-full bg-violet-100 flex items-center justify-center shrink-0 font-bold text-violet-600">1</div>
+              <div className="h-8 w-8 rounded-full bg-violet-100 dark:bg-violet-900/50 flex items-center justify-center shrink-0 font-bold text-violet-600 dark:text-violet-400">1</div>
               <div>
-                <h4 className="font-semibold text-slate-900 mb-1">Copy Repository URL</h4>
-                <p className="text-slate-600 text-sm">Navigate to any public GitHub repository and copy its URL from the address bar.</p>
+                <h4 className="font-semibold text-slate-900 dark:text-white mb-1">Copy Repository URL</h4>
+                <p className="text-slate-600 dark:text-slate-300 text-sm">Navigate to any public GitHub repository and copy its URL from the address bar.</p>
                 <CodeBlock code="https://github.com/pmndrs/zustand" language="url" />
               </div>
             </div>
 
             <div className="flex gap-4">
-              <div className="h-8 w-8 rounded-full bg-violet-100 flex items-center justify-center shrink-0 font-bold text-violet-600">2</div>
+              <div className="h-8 w-8 rounded-full bg-violet-100 dark:bg-violet-900/50 flex items-center justify-center shrink-0 font-bold text-violet-600 dark:text-violet-400">2</div>
               <div>
-                <h4 className="font-semibold text-slate-900 mb-1">Paste and Analyze</h4>
-                <p className="text-slate-600 text-sm">Paste the URL into RepoMap's search bar and click "Analyze". You'll see a real-time progress indicator showing each step: connecting to GitHub, fetching files, analyzing dependencies, and building the graph.</p>
+                <h4 className="font-semibold text-slate-900 dark:text-white mb-1">Paste and Analyze</h4>
+                <p className="text-slate-600 dark:text-slate-300 text-sm">Paste the URL into RepoMap's search bar and click "Analyze". You'll see a real-time progress indicator showing each step: connecting to GitHub, fetching files, analyzing dependencies, and building the graph.</p>
               </div>
             </div>
 
             <div className="flex gap-4">
-              <div className="h-8 w-8 rounded-full bg-violet-100 flex items-center justify-center shrink-0 font-bold text-violet-600">3</div>
+              <div className="h-8 w-8 rounded-full bg-violet-100 dark:bg-violet-900/50 flex items-center justify-center shrink-0 font-bold text-violet-600 dark:text-violet-400">3</div>
               <div>
-                <h4 className="font-semibold text-slate-900 mb-1">Explore Results</h4>
-                <p className="text-slate-600 text-sm">View the interactive dependency graph, check orphan files, and explore the codebase structure.</p>
+                <h4 className="font-semibold text-slate-900 dark:text-white mb-1">Explore Results</h4>
+                <p className="text-slate-600 dark:text-slate-300 text-sm">View the interactive dependency graph, check orphan files, and explore the codebase structure.</p>
               </div>
             </div>
           </div>
@@ -105,60 +105,60 @@ function DocsContent() {
         {/* Features */}
         <Section id="features" title="Features">
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="border rounded-lg p-6">
-              <div className="h-12 w-12 rounded-xl bg-violet-100 flex items-center justify-center mb-4">
-                <Network className="h-6 w-6 text-violet-600" />
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-6 bg-white dark:bg-slate-800">
+              <div className="h-12 w-12 rounded-xl bg-violet-100 dark:bg-violet-900/50 flex items-center justify-center mb-4">
+                <Network className="h-6 w-6 text-violet-600 dark:text-violet-400" />
               </div>
-              <h4 className="text-lg font-semibold text-slate-900 mb-2">Interactive Dependency Graph</h4>
-              <p className="text-slate-600 text-sm mb-4">
+              <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">Interactive Dependency Graph</h4>
+              <p className="text-slate-600 dark:text-slate-300 text-sm mb-4">
                 Visualize your codebase as an interactive graph with full-screen mode, zoom, pan, and intelligent ELK layout algorithm for clean organization.
               </p>
-              <ul className="text-sm text-slate-600 space-y-1">
+              <ul className="text-sm text-slate-600 dark:text-slate-300 space-y-1">
                 <li className="flex items-center gap-2"><ChevronRight className="h-4 w-4 text-violet-500" />Full-screen immersive mode</li>
                 <li className="flex items-center gap-2"><ChevronRight className="h-4 w-4 text-violet-500" />Click nodes to see file details</li>
                 <li className="flex items-center gap-2"><ChevronRight className="h-4 w-4 text-violet-500" />Color-coded by file status</li>
               </ul>
             </div>
 
-            <div className="border rounded-lg p-6">
-              <div className="h-12 w-12 rounded-xl bg-red-100 flex items-center justify-center mb-4">
-                <FileWarning className="h-6 w-6 text-red-600" />
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-6 bg-white dark:bg-slate-800">
+              <div className="h-12 w-12 rounded-xl bg-red-100 dark:bg-red-900/50 flex items-center justify-center mb-4">
+                <FileWarning className="h-6 w-6 text-red-600 dark:text-red-400" />
               </div>
-              <h4 className="text-lg font-semibold text-slate-900 mb-2">Orphan File Detection</h4>
-              <p className="text-slate-600 text-sm mb-4">
+              <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">Orphan File Detection</h4>
+              <p className="text-slate-600 dark:text-slate-300 text-sm mb-4">
                 Automatically identify files that exist in your codebase but are never imported by any other file - potential dead code candidates.
               </p>
-              <ul className="text-sm text-slate-600 space-y-1">
+              <ul className="text-sm text-slate-600 dark:text-slate-300 space-y-1">
                 <li className="flex items-center gap-2"><ChevronRight className="h-4 w-4 text-red-500" />Smart detection avoiding false positives</li>
                 <li className="flex items-center gap-2"><ChevronRight className="h-4 w-4 text-red-500" />Excludes config and test files</li>
                 <li className="flex items-center gap-2"><ChevronRight className="h-4 w-4 text-red-500" />Status reasons for transparency</li>
               </ul>
             </div>
 
-            <div className="border rounded-lg p-6">
-              <div className="h-12 w-12 rounded-xl bg-emerald-100 flex items-center justify-center mb-4">
-                <GitBranch className="h-6 w-6 text-emerald-600" />
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-6 bg-white dark:bg-slate-800">
+              <div className="h-12 w-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center mb-4">
+                <GitBranch className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
               </div>
-              <h4 className="text-lg font-semibold text-slate-900 mb-2">Entry Point Detection</h4>
-              <p className="text-slate-600 text-sm mb-4">
+              <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">Entry Point Detection</h4>
+              <p className="text-slate-600 dark:text-slate-300 text-sm mb-4">
                 Automatically identifies application entry points like main.tsx, index.ts, and other common patterns across various project structures.
               </p>
-              <ul className="text-sm text-slate-600 space-y-1">
+              <ul className="text-sm text-slate-600 dark:text-slate-300 space-y-1">
                 <li className="flex items-center gap-2"><ChevronRight className="h-4 w-4 text-emerald-500" />Works with monorepos</li>
                 <li className="flex items-center gap-2"><ChevronRight className="h-4 w-4 text-emerald-500" />Supports client/server structures</li>
                 <li className="flex items-center gap-2"><ChevronRight className="h-4 w-4 text-emerald-500" />Detects CLI and bin scripts</li>
               </ul>
             </div>
 
-            <div className="border rounded-lg p-6">
-              <div className="h-12 w-12 rounded-xl bg-blue-100 flex items-center justify-center mb-4">
-                <Search className="h-6 w-6 text-blue-600" />
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-6 bg-white dark:bg-slate-800">
+              <div className="h-12 w-12 rounded-xl bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center mb-4">
+                <Search className="h-6 w-6 text-blue-600 dark:text-blue-400" />
               </div>
-              <h4 className="text-lg font-semibold text-slate-900 mb-2">Path Alias Resolution</h4>
-              <p className="text-slate-600 text-sm mb-4">
+              <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">Path Alias Resolution</h4>
+              <p className="text-slate-600 dark:text-slate-300 text-sm mb-4">
                 Understands common path alias patterns like @/, ~/, and #/ used in modern frameworks like Vite, Next.js, and create-react-app.
               </p>
-              <ul className="text-sm text-slate-600 space-y-1">
+              <ul className="text-sm text-slate-600 dark:text-slate-300 space-y-1">
                 <li className="flex items-center gap-2"><ChevronRight className="h-4 w-4 text-blue-500" />Automatic src folder detection</li>
                 <li className="flex items-center gap-2"><ChevronRight className="h-4 w-4 text-blue-500" />Works with nested structures</li>
                 <li className="flex items-center gap-2"><ChevronRight className="h-4 w-4 text-blue-500" />No configuration needed</li>
@@ -169,19 +169,19 @@ function DocsContent() {
 
         {/* How It Works */}
         <Section id="how-it-works" title="How It Works">
-          <p className="text-slate-600 mb-6">
+          <p className="text-slate-600 dark:text-slate-300 mb-6">
             RepoMap uses a multi-step process to analyze repositories and build the dependency graph:
           </p>
 
           <div className="relative">
-            <div className="absolute left-3 sm:left-4 top-0 bottom-0 w-0.5 bg-slate-200"></div>
+            <div className="absolute left-3 sm:left-4 top-0 bottom-0 w-0.5 bg-slate-200 dark:bg-slate-700"></div>
             
             <div className="space-y-8">
               <div className="relative flex gap-3 sm:gap-6">
                 <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-full bg-violet-600 flex items-center justify-center shrink-0 text-white font-bold text-xs sm:text-sm z-10">1</div>
                 <div className="pb-8 min-w-0 flex-1">
-                  <h4 className="font-semibold text-slate-900 mb-2">Repository Fetch</h4>
-                  <p className="text-slate-600 text-sm">
+                  <h4 className="font-semibold text-slate-900 dark:text-white mb-2">Repository Fetch</h4>
+                  <p className="text-slate-600 dark:text-slate-300 text-sm">
                     Using the GitHub API, we fetch the repository's file tree and retrieve content for all supported JavaScript/TypeScript files. We skip common non-essential directories like node_modules, dist, and build.
                   </p>
                   <CodeBlock code={`// Supported extensions
@@ -195,8 +195,8 @@ const SKIP = ['node_modules', 'dist', 'build', '.git', 'coverage'];`} />
               <div className="relative flex gap-3 sm:gap-6">
                 <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-full bg-violet-600 flex items-center justify-center shrink-0 text-white font-bold text-xs sm:text-sm z-10">2</div>
                 <div className="pb-8 min-w-0 flex-1">
-                  <h4 className="font-semibold text-slate-900 mb-2">Import Extraction</h4>
-                  <p className="text-slate-600 text-sm">
+                  <h4 className="font-semibold text-slate-900 dark:text-white mb-2">Import Extraction</h4>
+                  <p className="text-slate-600 dark:text-slate-300 text-sm">
                     Each file is parsed to extract import statements. We support ES6 imports, CommonJS require, dynamic imports, and re-exports.
                   </p>
                   <CodeBlock code={`// All supported import patterns
@@ -213,8 +213,8 @@ export { X } from './module';       // Re-export`} />
               <div className="relative flex gap-3 sm:gap-6">
                 <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-full bg-violet-600 flex items-center justify-center shrink-0 text-white font-bold text-xs sm:text-sm z-10">3</div>
                 <div className="pb-8 min-w-0 flex-1">
-                  <h4 className="font-semibold text-slate-900 mb-2">Path Resolution</h4>
-                  <p className="text-slate-600 text-sm">
+                  <h4 className="font-semibold text-slate-900 dark:text-white mb-2">Path Resolution</h4>
+                  <p className="text-slate-600 dark:text-slate-300 text-sm">
                     Import paths are resolved to actual file paths. This includes handling relative paths, path aliases (@/), extension inference, and index file resolution.
                   </p>
                   <CodeBlock code={`// Resolution examples
@@ -227,8 +227,8 @@ export { X } from './module';       // Re-export`} />
               <div className="relative flex gap-3 sm:gap-6">
                 <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-full bg-violet-600 flex items-center justify-center shrink-0 text-white font-bold text-xs sm:text-sm z-10">4</div>
                 <div className="pb-8 min-w-0 flex-1">
-                  <h4 className="font-semibold text-slate-900 mb-2">Graph Construction</h4>
-                  <p className="text-slate-600 text-sm">
+                  <h4 className="font-semibold text-slate-900 dark:text-white mb-2">Graph Construction</h4>
+                  <p className="text-slate-600 dark:text-slate-300 text-sm">
                     A directed graph is built where nodes are files and edges are import relationships. Each node is classified as an entry point, regular file, or orphan based on analysis rules.
                   </p>
                 </div>
@@ -237,8 +237,8 @@ export { X } from './module';       // Re-export`} />
               <div className="relative flex gap-3 sm:gap-6">
                 <div className="h-6 w-6 sm:h-8 sm:w-8 rounded-full bg-violet-600 flex items-center justify-center shrink-0 text-white font-bold text-xs sm:text-sm z-10">5</div>
                 <div className="min-w-0 flex-1">
-                  <h4 className="font-semibold text-slate-900 mb-2">Visualization</h4>
-                  <p className="text-slate-600 text-sm">
+                  <h4 className="font-semibold text-slate-900 dark:text-white mb-2">Visualization</h4>
+                  <p className="text-slate-600 dark:text-slate-300 text-sm">
                     The graph is rendered using React Flow with ELK layout algorithm for automatic node positioning. The result is an interactive, zoomable visualization.
                   </p>
                 </div>
@@ -249,39 +249,39 @@ export { X } from './module';       // Re-export`} />
 
         {/* Dependency Analysis */}
         <Section id="dependency-analysis" title="Dependency Analysis">
-          <p className="text-slate-600 mb-6">
+          <p className="text-slate-600 dark:text-slate-300 mb-6">
             The dependency analyzer builds a complete map of import/export relationships in your codebase.
           </p>
 
-          <h3 className="text-lg font-semibold text-slate-900 mt-8 mb-4">What Gets Tracked</h3>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mt-8 mb-4">What Gets Tracked</h3>
           <div className="overflow-x-auto">
-            <table className="w-full text-sm border rounded-lg">
-              <thead className="bg-slate-50">
+            <table className="w-full text-sm border border-slate-200 dark:border-slate-700 rounded-lg">
+              <thead className="bg-slate-50 dark:bg-slate-800">
                 <tr>
-                  <th className="text-left p-3 border-b">Metric</th>
-                  <th className="text-left p-3 border-b">Description</th>
+                  <th className="text-left p-3 border-b border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white">Metric</th>
+                  <th className="text-left p-3 border-b border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white">Description</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="bg-white dark:bg-slate-800">
                 <tr>
-                  <td className="p-3 border-b font-medium">imports</td>
-                  <td className="p-3 border-b text-slate-600">List of files this file imports from</td>
+                  <td className="p-3 border-b border-slate-200 dark:border-slate-700 font-medium text-slate-900 dark:text-white">imports</td>
+                  <td className="p-3 border-b border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300">List of files this file imports from</td>
                 </tr>
                 <tr>
-                  <td className="p-3 border-b font-medium">importedBy</td>
-                  <td className="p-3 border-b text-slate-600">List of files that import this file</td>
+                  <td className="p-3 border-b border-slate-200 dark:border-slate-700 font-medium text-slate-900 dark:text-white">importedBy</td>
+                  <td className="p-3 border-b border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300">List of files that import this file</td>
                 </tr>
                 <tr>
-                  <td className="p-3 border-b font-medium">isOrphan</td>
-                  <td className="p-3 border-b text-slate-600">Whether this file is a potential orphan</td>
+                  <td className="p-3 border-b border-slate-200 dark:border-slate-700 font-medium text-slate-900 dark:text-white">isOrphan</td>
+                  <td className="p-3 border-b border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300">Whether this file is a potential orphan</td>
                 </tr>
                 <tr>
-                  <td className="p-3 border-b font-medium">isEntryPoint</td>
-                  <td className="p-3 border-b text-slate-600">Whether this file is an entry point</td>
+                  <td className="p-3 border-b border-slate-200 dark:border-slate-700 font-medium text-slate-900 dark:text-white">isEntryPoint</td>
+                  <td className="p-3 border-b border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300">Whether this file is an entry point</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-medium">statusReason</td>
-                  <td className="p-3 text-slate-600">Explanation for the file's classification</td>
+                  <td className="p-3 font-medium text-slate-900 dark:text-white">statusReason</td>
+                  <td className="p-3 text-slate-600 dark:text-slate-300">Explanation for the file's classification</td>
                 </tr>
               </tbody>
             </table>
@@ -294,13 +294,13 @@ export { X } from './module';       // Re-export`} />
 
         {/* Orphan Detection */}
         <Section id="orphan-detection" title="Orphan Detection">
-          <p className="text-slate-600 mb-6">
+          <p className="text-slate-600 dark:text-slate-300 mb-6">
             Orphan files are files that exist in your codebase but are never imported by any other file. They're potential dead code candidates that may be safe to remove.
           </p>
 
-          <h3 className="text-lg font-semibold text-slate-900 mt-8 mb-4">Detection Rules</h3>
-          <p className="text-slate-600 mb-4">A file is considered an orphan if:</p>
-          <ul className="space-y-2 text-slate-600 mb-6">
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mt-8 mb-4">Detection Rules</h3>
+          <p className="text-slate-600 dark:text-slate-300 mb-4">A file is considered an orphan if:</p>
+          <ul className="space-y-2 text-slate-600 dark:text-slate-300 mb-6">
             <li className="flex items-center gap-2">
               <XCircle className="h-5 w-5 text-red-500 shrink-0" />
               No other file imports it
@@ -315,60 +315,60 @@ export { X } from './module';       // Re-export`} />
             </li>
           </ul>
 
-          <h3 className="text-lg font-semibold text-slate-900 mt-8 mb-4">Files Excluded from Orphan Detection</h3>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mt-8 mb-4">Files Excluded from Orphan Detection</h3>
           <div className="grid md:grid-cols-2 gap-4">
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold text-slate-900 mb-2 flex items-center gap-2">
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-800">
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
                 <CheckCircle2 className="h-5 w-5 text-emerald-500" />
                 Entry Points
               </h4>
-              <p className="text-sm text-slate-600">main.tsx, index.ts, app.ts inside src folders</p>
+              <p className="text-sm text-slate-600 dark:text-slate-300">main.tsx, index.ts, app.ts inside src folders</p>
             </div>
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold text-slate-900 mb-2 flex items-center gap-2">
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-800">
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
                 <CheckCircle2 className="h-5 w-5 text-emerald-500" />
                 Config Files
               </h4>
-              <p className="text-sm text-slate-600">*.config.js, .eslintrc, tsconfig.json, etc.</p>
+              <p className="text-sm text-slate-600 dark:text-slate-300">*.config.js, .eslintrc, tsconfig.json, etc.</p>
             </div>
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold text-slate-900 mb-2 flex items-center gap-2">
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-800">
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
                 <CheckCircle2 className="h-5 w-5 text-emerald-500" />
                 Test Files
               </h4>
-              <p className="text-sm text-slate-600">*.test.ts, *.spec.ts, __tests__/* files</p>
+              <p className="text-sm text-slate-600 dark:text-slate-300">*.test.ts, *.spec.ts, __tests__/* files</p>
             </div>
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold text-slate-900 mb-2 flex items-center gap-2">
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-800">
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
                 <CheckCircle2 className="h-5 w-5 text-emerald-500" />
                 Type Definitions
               </h4>
-              <p className="text-sm text-slate-600">*.d.ts files, types/ directories</p>
+              <p className="text-sm text-slate-600 dark:text-slate-300">*.d.ts files, types/ directories</p>
             </div>
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold text-slate-900 mb-2 flex items-center gap-2">
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-800">
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
                 <CheckCircle2 className="h-5 w-5 text-emerald-500" />
                 Storybook Files
               </h4>
-              <p className="text-sm text-slate-600">*.stories.tsx, .storybook/ files</p>
+              <p className="text-sm text-slate-600 dark:text-slate-300">*.stories.tsx, .storybook/ files</p>
             </div>
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold text-slate-900 mb-2 flex items-center gap-2">
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-800">
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
                 <CheckCircle2 className="h-5 w-5 text-emerald-500" />
                 Static Assets
               </h4>
-              <p className="text-sm text-slate-600">Files in public/, static/, assets/ folders</p>
+              <p className="text-sm text-slate-600 dark:text-slate-300">Files in public/, static/, assets/ folders</p>
             </div>
           </div>
         </Section>
 
         {/* Entry Points */}
         <Section id="entry-points" title="Entry Points">
-          <p className="text-slate-600 mb-6">
+          <p className="text-slate-600 dark:text-slate-300 mb-6">
             Entry points are files that serve as the starting point of your application. They're typically referenced by HTML files, build tools, or executed directly rather than imported by other files.
           </p>
 
-          <h3 className="text-lg font-semibold text-slate-900 mt-8 mb-4">Detection Patterns</h3>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mt-8 mb-4">Detection Patterns</h3>
           <CodeBlock code={`// Files matching these patterns are entry points
 
 // Main files in src folders (any nesting level)
@@ -392,51 +392,51 @@ index.js              // At repository root
 
         {/* Supported Frameworks */}
         <Section id="supported-frameworks" title="Supported Frameworks">
-          <p className="text-slate-600 mb-6">
+          <p className="text-slate-600 dark:text-slate-300 mb-6">
             RepoMap intelligently detects framework-specific files that are loaded by their respective frameworks rather than through explicit imports. These files are never marked as orphans.
           </p>
 
-          <h3 className="text-lg font-semibold text-slate-900 mt-8 mb-4">Languages</h3>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mt-8 mb-4">Languages</h3>
           <div className="grid sm:grid-cols-2 gap-4 mb-8">
-            <div className="border rounded-lg p-4 bg-gradient-to-br from-yellow-50 to-white">
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-gradient-to-br from-yellow-50 to-white dark:from-yellow-900/20 dark:to-slate-800">
               <div className="flex items-center gap-3 mb-2">
-                <div className="h-10 w-10 rounded-lg bg-yellow-100 flex items-center justify-center">
-                  <span className="text-xl font-bold text-yellow-600">JS</span>
+                <div className="h-10 w-10 rounded-lg bg-yellow-100 dark:bg-yellow-900/50 flex items-center justify-center">
+                  <span className="text-xl font-bold text-yellow-600 dark:text-yellow-400">JS</span>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-slate-900">JavaScript</h4>
-                  <p className="text-xs text-slate-500">.js, .jsx, .mjs, .cjs</p>
+                  <h4 className="font-semibold text-slate-900 dark:text-white">JavaScript</h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">.js, .jsx, .mjs, .cjs</p>
                 </div>
               </div>
             </div>
-            <div className="border rounded-lg p-4 bg-gradient-to-br from-blue-50 to-white">
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-gradient-to-br from-blue-50 to-white dark:from-blue-900/20 dark:to-slate-800">
               <div className="flex items-center gap-3 mb-2">
-                <div className="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                  <span className="text-xl font-bold text-blue-600">TS</span>
+                <div className="h-10 w-10 rounded-lg bg-blue-100 dark:bg-blue-900/50 flex items-center justify-center">
+                  <span className="text-xl font-bold text-blue-600 dark:text-blue-400">TS</span>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-slate-900">TypeScript</h4>
-                  <p className="text-xs text-slate-500">.ts, .tsx</p>
+                  <h4 className="font-semibold text-slate-900 dark:text-white">TypeScript</h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">.ts, .tsx</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <h3 className="text-lg font-semibold text-slate-900 mt-8 mb-4">React Ecosystem</h3>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mt-8 mb-4">React Ecosystem</h3>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold text-slate-900 mb-2">React / Vite</h4>
-              <p className="text-sm text-slate-600 mb-3">Standard React apps with Vite or CRA</p>
-              <div className="text-xs text-slate-500 space-y-1">
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-800">
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2">React / Vite</h4>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mb-3">Standard React apps with Vite or CRA</p>
+              <div className="text-xs text-slate-500 dark:text-slate-400 space-y-1">
                 <div>✓ src/main.tsx entry point</div>
                 <div>✓ Component imports</div>
                 <div>✓ Path aliases (@/)</div>
               </div>
             </div>
-            <div className="border rounded-lg p-4 border-violet-200 bg-violet-50/30">
-              <h4 className="font-semibold text-slate-900 mb-2">Next.js</h4>
-              <p className="text-sm text-slate-600 mb-3">App Router & Pages Router</p>
-              <div className="text-xs text-slate-500 space-y-1">
+            <div className="border border-violet-200 dark:border-violet-700 rounded-lg p-4 bg-violet-50/30 dark:bg-violet-900/20">
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2">Next.js</h4>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mb-3">App Router & Pages Router</p>
+              <div className="text-xs text-slate-500 dark:text-slate-400 space-y-1">
                 <div>✓ app/ directory (page, layout, route)</div>
                 <div>✓ pages/ directory routes</div>
                 <div>✓ API routes (pages/api, app/route)</div>
@@ -444,10 +444,10 @@ index.js              // At repository root
                 <div>✓ _app, _document, _error</div>
               </div>
             </div>
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold text-slate-900 mb-2">Remix</h4>
-              <p className="text-sm text-slate-600 mb-3">Full stack React framework</p>
-              <div className="text-xs text-slate-500 space-y-1">
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-800">
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2">Remix</h4>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mb-3">Full stack React framework</p>
+              <div className="text-xs text-slate-500 dark:text-slate-400 space-y-1">
                 <div>✓ app/routes/ file-based routing</div>
                 <div>✓ root.tsx</div>
                 <div>✓ entry.client/server.tsx</div>
@@ -455,21 +455,21 @@ index.js              // At repository root
             </div>
           </div>
 
-          <h3 className="text-lg font-semibold text-slate-900 mt-8 mb-4">Vue Ecosystem</h3>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mt-8 mb-4">Vue Ecosystem</h3>
           <div className="grid sm:grid-cols-2 gap-4 mb-8">
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold text-slate-900 mb-2">Vue.js</h4>
-              <p className="text-sm text-slate-600 mb-3">Standard Vue 3 applications</p>
-              <div className="text-xs text-slate-500 space-y-1">
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-800">
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2">Vue.js</h4>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mb-3">Standard Vue 3 applications</p>
+              <div className="text-xs text-slate-500 dark:text-slate-400 space-y-1">
                 <div>✓ main.ts entry point</div>
                 <div>✓ Component imports</div>
                 <div>✓ Composables</div>
               </div>
             </div>
-            <div className="border rounded-lg p-4 border-green-200 bg-green-50/30">
-              <h4 className="font-semibold text-slate-900 mb-2">Nuxt.js</h4>
-              <p className="text-sm text-slate-600 mb-3">Vue meta-framework</p>
-              <div className="text-xs text-slate-500 space-y-1">
+            <div className="border border-green-200 dark:border-green-700 rounded-lg p-4 bg-green-50/30 dark:bg-green-900/20">
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2">Nuxt.js</h4>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mb-3">Vue meta-framework</p>
+              <div className="text-xs text-slate-500 dark:text-slate-400 space-y-1">
                 <div>✓ pages/ auto-routing</div>
                 <div>✓ layouts/ directory</div>
                 <div>✓ server/api/ routes</div>
@@ -478,21 +478,21 @@ index.js              // At repository root
             </div>
           </div>
 
-          <h3 className="text-lg font-semibold text-slate-900 mt-8 mb-4">Other Frameworks</h3>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mt-8 mb-4">Other Frameworks</h3>
           <div className="grid sm:grid-cols-2 gap-4 mb-6">
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold text-slate-900 mb-2">SvelteKit</h4>
-              <p className="text-sm text-slate-600 mb-3">Svelte meta-framework</p>
-              <div className="text-xs text-slate-500 space-y-1">
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-800">
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2">SvelteKit</h4>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mb-3">Svelte meta-framework</p>
+              <div className="text-xs text-slate-500 dark:text-slate-400 space-y-1">
                 <div>✓ +page.svelte routes</div>
                 <div>✓ +layout.svelte</div>
                 <div>✓ +server.ts API endpoints</div>
               </div>
             </div>
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold text-slate-900 mb-2">Astro</h4>
-              <p className="text-sm text-slate-600 mb-3">Content-focused framework</p>
-              <div className="text-xs text-slate-500 space-y-1">
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-800">
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2">Astro</h4>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mb-3">Content-focused framework</p>
+              <div className="text-xs text-slate-500 dark:text-slate-400 space-y-1">
                 <div>✓ src/pages/ routing (.astro, .md)</div>
                 <div>✓ src/layouts/</div>
                 <div>✓ Island architecture</div>

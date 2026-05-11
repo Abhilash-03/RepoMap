@@ -4,10 +4,10 @@ import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/ca
 function FeatureCards() {
   return (
     <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mt-10 sm:mt-16">
-      <Card className="border-slate-200 hover:border-violet-200 hover:shadow-lg transition-all duration-300">
+      <Card className="border-slate-200 dark:border-slate-700 hover:border-violet-200 dark:hover:border-violet-600 hover:shadow-lg transition-all duration-300">
         <CardHeader className="p-4 sm:p-6">
-          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-violet-100 flex items-center justify-center mb-2">
-            <Network className="h-5 w-5 sm:h-6 sm:w-6 text-violet-600" />
+          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-violet-100 dark:bg-violet-900/50 flex items-center justify-center mb-2">
+            <Network className="h-5 w-5 sm:h-6 sm:w-6 text-violet-600 dark:text-violet-400" />
           </div>
           <CardTitle className="text-base sm:text-lg">Interactive Graph</CardTitle>
           <CardDescription className="text-sm">
@@ -16,10 +16,10 @@ function FeatureCards() {
         </CardHeader>
       </Card>
 
-      <Card className="border-slate-200 hover:border-red-200 hover:shadow-lg transition-all duration-300">
+      <Card className="border-slate-200 dark:border-slate-700 hover:border-red-200 dark:hover:border-red-600 hover:shadow-lg transition-all duration-300">
         <CardHeader className="p-4 sm:p-6">
-          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-red-100 flex items-center justify-center mb-2">
-            <FileWarning className="h-5 w-5 sm:h-6 sm:w-6 text-red-600" />
+          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-red-100 dark:bg-red-900/50 flex items-center justify-center mb-2">
+            <FileWarning className="h-5 w-5 sm:h-6 sm:w-6 text-red-600 dark:text-red-400" />
           </div>
           <CardTitle className="text-base sm:text-lg">Orphan Detection</CardTitle>
           <CardDescription className="text-sm">
@@ -28,10 +28,10 @@ function FeatureCards() {
         </CardHeader>
       </Card>
 
-      <Card className="border-slate-200 hover:border-emerald-200 hover:shadow-lg transition-all duration-300 sm:col-span-2 md:col-span-1">
+      <Card className="border-slate-200 dark:border-slate-700 hover:border-emerald-200 dark:hover:border-emerald-600 hover:shadow-lg transition-all duration-300 sm:col-span-2 md:col-span-1">
         <CardHeader className="p-4 sm:p-6">
-          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-emerald-100 flex items-center justify-center mb-2">
-            <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-emerald-600" />
+          <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center mb-2">
+            <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-emerald-600 dark:text-emerald-400" />
           </div>
           <CardTitle className="text-base sm:text-lg">Zero Setup</CardTitle>
           <CardDescription className="text-sm">

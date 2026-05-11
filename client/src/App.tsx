@@ -71,7 +71,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-white to-slate-100">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800">
       <Header />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -87,11 +87,11 @@ function App() {
 
           {/* Token Warning */}
           {!getStoredGitHubToken() && !result && !isLoading && (
-            <Card className="mb-8 max-w-2xl mx-auto border-amber-200 bg-amber-50">
+            <Card className="mb-8 max-w-2xl mx-auto border-amber-200 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/30">
               <CardContent className="pt-4 pb-4 flex items-center gap-3">
                 <Info className="h-5 w-5 text-amber-500 shrink-0" />
                 <div className="flex-1">
-                  <p className="text-sm text-amber-700">
+                  <p className="text-sm text-amber-700 dark:text-amber-300">
                     <span className="font-medium">Limited to 60 requests/hour.</span>
                     {' '}Add your GitHub token in Settings for 5,000 req/hr.
                   </p>

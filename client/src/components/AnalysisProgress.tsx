@@ -56,26 +56,26 @@ function AnalysisProgress({ repoUrl }: AnalysisProgressProps) {
   }, []);
 
   return (
-    <Card className="mb-8 max-w-2xl mx-auto border-violet-200 bg-gradient-to-br from-violet-50 to-purple-50 overflow-hidden">
+    <Card className="mb-8 max-w-2xl mx-auto border-violet-200 dark:border-violet-700 bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-900/30 dark:to-purple-900/30 overflow-hidden">
       <CardContent className="pt-6 pb-6">
         {/* Header */}
         <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-violet-100 mb-4">
-            <Loader2 className="h-8 w-8 text-violet-600 animate-spin" />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-violet-100 dark:bg-violet-900/50 mb-4">
+            <Loader2 className="h-8 w-8 text-violet-600 dark:text-violet-400 animate-spin" />
           </div>
-          <h3 className="text-lg font-semibold text-slate-800">Analyzing Repository</h3>
-          <p className="text-sm text-slate-500 mt-1 truncate max-w-xs mx-auto">{repoName}</p>
+          <h3 className="text-lg font-semibold text-slate-800 dark:text-white">Analyzing Repository</h3>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 truncate max-w-xs mx-auto">{repoName}</p>
         </div>
 
         {/* Progress Bar */}
         <div className="mb-6">
-          <div className="h-2 bg-violet-100 rounded-full overflow-hidden">
+          <div className="h-2 bg-violet-100 dark:bg-violet-900/50 rounded-full overflow-hidden">
             <div 
               className="h-full bg-gradient-to-r from-violet-500 to-purple-500 rounded-full transition-all duration-300 ease-out"
               style={{ width: `${progress}%` }}
             />
           </div>
-          <p className="text-xs text-slate-500 text-right mt-1">{Math.round(progress)}%</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 text-right mt-1">{Math.round(progress)}%</p>
         </div>
 
         {/* Steps */}
@@ -90,35 +90,35 @@ function AnalysisProgress({ repoUrl }: AnalysisProgressProps) {
                 key={step.id}
                 className={cn(
                   "flex items-center gap-3 p-3 rounded-lg transition-all duration-300",
-                  isActive && "bg-white shadow-sm border border-violet-100",
+                  isActive && "bg-white dark:bg-slate-800 shadow-sm border border-violet-100 dark:border-violet-700",
                   isCompleted && "opacity-60",
                   !isActive && !isCompleted && "opacity-40"
                 )}
               >
                 <div className={cn(
                   "flex items-center justify-center w-8 h-8 rounded-full transition-colors",
-                  isActive && "bg-violet-100",
-                  isCompleted && "bg-green-100",
-                  !isActive && !isCompleted && "bg-slate-100"
+                  isActive && "bg-violet-100 dark:bg-violet-900/50",
+                  isCompleted && "bg-green-100 dark:bg-green-900/50",
+                  !isActive && !isCompleted && "bg-slate-100 dark:bg-slate-700"
                 )}>
                   {isCompleted ? (
-                    <CheckCircle2 className="h-4 w-4 text-green-600" />
+                    <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" />
                   ) : isActive ? (
-                    <Icon className="h-4 w-4 text-violet-600 animate-pulse" />
+                    <Icon className="h-4 w-4 text-violet-600 dark:text-violet-400 animate-pulse" />
                   ) : (
-                    <Icon className="h-4 w-4 text-slate-400" />
+                    <Icon className="h-4 w-4 text-slate-400 dark:text-slate-500" />
                   )}
                 </div>
                 <span className={cn(
                   "text-sm font-medium transition-colors",
-                  isActive && "text-violet-700",
-                  isCompleted && "text-green-700",
-                  !isActive && !isCompleted && "text-slate-500"
+                  isActive && "text-violet-700 dark:text-violet-300",
+                  isCompleted && "text-green-700 dark:text-green-400",
+                  !isActive && !isCompleted && "text-slate-500 dark:text-slate-400"
                 )}>
                   {step.label}
                 </span>
                 {isActive && (
-                  <Loader2 className="h-4 w-4 text-violet-500 animate-spin ml-auto" />
+                  <Loader2 className="h-4 w-4 text-violet-500 dark:text-violet-400 animate-spin ml-auto" />
                 )}
               </div>
             );
@@ -126,8 +126,8 @@ function AnalysisProgress({ repoUrl }: AnalysisProgressProps) {
         </div>
 
         {/* Tips */}
-        <div className="mt-6 pt-4 border-t border-violet-100">
-          <p className="text-xs text-slate-500 text-center">
+        <div className="mt-6 pt-4 border-t border-violet-100 dark:border-violet-700">
+          <p className="text-xs text-slate-500 dark:text-slate-400 text-center">
             💡 Large repositories may take longer to analyze
           </p>
         </div>

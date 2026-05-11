@@ -96,7 +96,7 @@ export default function TokenSettings({ onTokenChange }: TokenSettingsProps) {
         <Button variant="ghost" size="icon" className="relative">
           <Settings className="h-5 w-5" />
           {hasToken && (
-            <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 bg-green-500 rounded-full border-2 border-white" />
+            <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 bg-green-500 rounded-full border-2 border-white dark:border-slate-800" />
           )}
         </Button>
       </DialogTrigger>
@@ -114,14 +114,14 @@ export default function TokenSettings({ onTokenChange }: TokenSettingsProps) {
         <div className="space-y-4 py-4">
           {/* Current Status */}
           <div className="flex items-center gap-2">
-            <span className="text-sm text-slate-500">Status:</span>
+            <span className="text-sm text-slate-500 dark:text-slate-400">Status:</span>
             {hasToken ? (
-              <Badge className="bg-green-100 text-green-700 hover:bg-green-100">
+              <Badge className="bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/50">
                 <Check className="h-3 w-3 mr-1" />
                 Token configured
               </Badge>
             ) : (
-              <Badge variant="outline" className="text-amber-600 border-amber-300">
+              <Badge variant="outline" className="text-amber-600 dark:text-amber-400 border-amber-300 dark:border-amber-600">
                 <AlertTriangle className="h-3 w-3 mr-1" />
                 No token (60 req/hr)
               </Badge>
@@ -129,11 +129,11 @@ export default function TokenSettings({ onTokenChange }: TokenSettingsProps) {
           </div>
 
           {/* Rate Limit Display */}
-          <div className="border rounded-lg p-3 bg-slate-50">
+          <div className="border dark:border-slate-600 rounded-lg p-3 bg-slate-50 dark:bg-slate-700">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <Zap className="h-4 w-4 text-violet-500" />
-                <span className="text-sm font-medium text-slate-700">API Rate Limit</span>
+                <Zap className="h-4 w-4 text-violet-500 dark:text-violet-400" />
+                <span className="text-sm font-medium text-slate-700 dark:text-slate-200">API Rate Limit</span>
               </div>
               <Button
                 variant="ghost"
@@ -147,20 +147,20 @@ export default function TokenSettings({ onTokenChange }: TokenSettingsProps) {
             </div>
             
             {rateError ? (
-              <p className="text-xs text-red-500">{rateError}</p>
+              <p className="text-xs text-red-500 dark:text-red-400">{rateError}</p>
             ) : rateLimit ? (
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-slate-500">Remaining</span>
+                  <span className="text-slate-500 dark:text-slate-400">Remaining</span>
                   <span className={cn(
                     "font-semibold",
-                    rateLimit.remaining < 10 ? "text-red-600" :
-                    rateLimit.remaining < 100 ? "text-amber-600" : "text-emerald-600"
+                    rateLimit.remaining < 10 ? "text-red-600 dark:text-red-400" :
+                    rateLimit.remaining < 100 ? "text-amber-600 dark:text-amber-400" : "text-emerald-600 dark:text-emerald-400"
                   )}>
                     {rateLimit.remaining.toLocaleString()} / {rateLimit.limit.toLocaleString()}
                   </span>
                 </div>
-                <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
+                <div className="h-2 bg-slate-200 dark:bg-slate-600 rounded-full overflow-hidden">
                   <div 
                     className={cn(
                       "h-full rounded-full transition-all",
@@ -170,18 +170,18 @@ export default function TokenSettings({ onTokenChange }: TokenSettingsProps) {
                     style={{ width: `${(rateLimit.remaining / rateLimit.limit) * 100}%` }}
                   />
                 </div>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-400 dark:text-slate-500">
                   Resets at {new Date(rateLimit.reset * 1000).toLocaleTimeString()}
                 </p>
               </div>
             ) : (
-              <p className="text-xs text-slate-400">Loading...</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500">Loading...</p>
             )}
           </div>
 
           {/* Token Input */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">Personal Access Token</label>
+            <label className="text-sm font-medium dark:text-slate-200">Personal Access Token</label>
             <div className="flex gap-2">
               <Input
                 type="password"
@@ -199,7 +199,7 @@ export default function TokenSettings({ onTokenChange }: TokenSettingsProps) {
           </div>
 
           {/* How to get token */}
-          <div className="text-sm text-slate-500 space-y-2">
+          <div className="text-sm text-slate-500 dark:text-slate-400 space-y-2">
             <p>To create a token:</p>
             <ol className="list-decimal list-inside space-y-1 text-xs">
               <li>Go to GitHub Settings → Developer settings → Personal access tokens</li>
@@ -211,7 +211,7 @@ export default function TokenSettings({ onTokenChange }: TokenSettingsProps) {
               href="https://github.com/settings/tokens/new?scopes=public_repo&description=RepoMap"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-violet-600 hover:underline text-xs"
+              className="inline-flex items-center gap-1 text-violet-600 dark:text-violet-400 hover:underline text-xs"
             >
               Create token on GitHub
               <ExternalLink className="h-3 w-3" />
@@ -235,7 +235,7 @@ export default function TokenSettings({ onTokenChange }: TokenSettingsProps) {
           </Button>
 
           {/* Privacy Note */}
-          <p className="text-xs text-slate-400 text-center">
+          <p className="text-xs text-slate-400 dark:text-slate-500 text-center">
             Your token is stored locally in your browser and never sent to our servers.
           </p>
         </div>

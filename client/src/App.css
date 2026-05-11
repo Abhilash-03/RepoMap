@@ -28,3 +28,36 @@
 .react-flow__controls-button:hover {
   background: #f8fafc !important;
 }
+
+/* Dark mode React Flow controls */
+.dark .react-flow__controls {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3) !important;
+}
+
+.dark .react-flow__controls-button {
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  fill: #94a3b8 !important;
+}
+
+.dark .react-flow__controls-button:hover {
+  background: #334155 !important;
+}
+
+.dark .react-flow__controls-button svg {
+  fill: #94a3b8 !important;
+}
+
+/* React Flow background pattern in dark mode */
+.dark .react-flow__background {
+  background-color: #0f172a !important;
+}
+
+/* React Flow minimap in dark mode */
+.dark .react-flow__minimap {
+  background-color: #1e293b !important;
+}
+
+.dark .react-flow__minimap-mask {
+  fill: rgb(15 23 42 / 0.8) !important;
+}

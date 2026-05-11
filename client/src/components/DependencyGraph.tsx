@@ -153,13 +153,13 @@ export default function DependencyGraph({
 
   return (
     <div
-      className={`relative ${isFullScreen ? "h-screen" : "h-[400px] sm:h-[600px]"} w-full bg-slate-50 rounded-lg overflow-hidden touch-none`}
+      className={`relative ${isFullScreen ? "h-screen" : "h-[400px] sm:h-[600px]"} w-full bg-slate-50 dark:bg-slate-900 rounded-lg overflow-hidden touch-none`}
     >
       {isLayouting && (
-        <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/80 backdrop-blur-sm">
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm">
           <div className="flex flex-col items-center gap-3">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-slate-800" />
-            <span className="text-sm text-slate-600">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-200 dark:border-slate-700 border-t-slate-800 dark:border-t-slate-200" />
+            <span className="text-sm text-slate-600 dark:text-slate-300">
               Calculating layout...
             </span>
           </div>
@@ -189,7 +189,7 @@ export default function DependencyGraph({
       >
         {/* Top toolbar - simplified on mobile */}
         <Panel position="top-left" className="flex items-center gap-2">
-          <div className="flex items-center gap-1 sm:gap-2 bg-white/90 backdrop-blur-sm rounded-lg p-1.5 sm:p-2 shadow-lg border border-slate-200">
+          <div className="flex items-center gap-1 sm:gap-2 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm rounded-lg p-1.5 sm:p-2 shadow-lg border border-slate-200 dark:border-slate-700">
             <Badge variant="secondary" className="gap-1 text-xs sm:text-sm">
               <Layers className="h-3 w-3" />
               <span className="hidden xs:inline">
@@ -212,7 +212,7 @@ export default function DependencyGraph({
         </Panel>
 
         <Panel position="top-right" className="flex items-center gap-2">
-          <div className="flex items-center gap-0.5 sm:gap-1 bg-white/90 backdrop-blur-sm rounded-lg p-0.5 sm:p-1 shadow-lg border border-slate-200">
+          <div className="flex items-center gap-0.5 sm:gap-1 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm rounded-lg p-0.5 sm:p-1 shadow-lg border border-slate-200 dark:border-slate-700">
             <Button
               variant="ghost"
               size="icon"
@@ -261,7 +261,7 @@ export default function DependencyGraph({
           showZoom={true}
           showFitView={true}
           showInteractive={false}
-          className="!bg-white/90 !backdrop-blur-sm !shadow-lg !border !border-slate-200 !rounded-lg overflow-hidden"
+          className="!bg-white/90 dark:!bg-slate-800/90 !backdrop-blur-sm !shadow-lg !border !border-slate-200 dark:!border-slate-700 !rounded-lg overflow-hidden"
         />
 
         {/* Hide MiniMap on mobile to save space and avoid touch conflicts */}
@@ -273,7 +273,7 @@ export default function DependencyGraph({
             return "#64748b";
           }}
           maskColor="rgba(0, 0, 0, 0.1)"
-          className="!bg-white/90 !backdrop-blur-sm !shadow-lg !border !border-slate-200 !rounded-lg !hidden sm:!block"
+          className="!bg-white/90 dark:!bg-slate-800/90 !backdrop-blur-sm !shadow-lg !border !border-slate-200 dark:!border-slate-700 !rounded-lg !hidden sm:!block"
         />
 
         <Background
@@ -286,19 +286,19 @@ export default function DependencyGraph({
 
       {/* Mobile detail panel - shows on tap */}
       {selectedNode && (
-        <div className="absolute bottom-0 left-0 right-0 z-20 bg-white border-t border-slate-200 shadow-lg animate-in slide-in-from-bottom duration-200">
+        <div className="absolute bottom-0 left-0 right-0 z-20 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 shadow-lg animate-in slide-in-from-bottom duration-200">
           <div className="p-3 sm:p-4 max-h-[60vh] overflow-y-auto">
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-start gap-3 min-w-0 flex-1">
                 <div
                   className={cn(
                     "p-2 rounded-lg shrink-0",
-                    selectedNode.data.isOrphan && "bg-red-100 text-red-600",
+                    selectedNode.data.isOrphan && "bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400",
                     selectedNode.data.isEntryPoint &&
-                      "bg-emerald-100 text-emerald-600",
+                      "bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400",
                     !selectedNode.data.isOrphan &&
                       !selectedNode.data.isEntryPoint &&
-                      "bg-slate-100 text-slate-600",
+                      "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300",
                   )}
                 >
                   {selectedNode.data.isOrphan ? (
@@ -310,13 +310,13 @@ export default function DependencyGraph({
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h3 className="font-semibold text-slate-900 text-sm sm:text-base">
+                  <h3 className="font-semibold text-slate-900 dark:text-white text-sm sm:text-base">
                     {selectedNode.data.label}
                   </h3>
 
                   {/* Full path with copy button */}
                   <div className="mt-1 flex items-center gap-2">
-                    <div className="flex items-center gap-1.5 text-xs text-slate-500 bg-slate-50 rounded px-2 py-1 max-w-full overflow-hidden">
+                    <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-700 rounded px-2 py-1 max-w-full overflow-hidden">
                       <FolderOpen className="h-3 w-3 shrink-0" />
                       <span className="truncate font-mono">{selectedNode.data.fullPath}</span>
                     </div>
@@ -327,7 +327,7 @@ export default function DependencyGraph({
                       onClick={() => copyToClipboard(selectedNode.data.fullPath)}
                     >
                       {copiedPath === selectedNode.data.fullPath ? (
-                        <Check className="h-3 w-3 text-green-600" />
+                        <Check className="h-3 w-3 text-green-600 dark:text-green-400" />
                       ) : (
                         <Copy className="h-3 w-3" />
                       )}
@@ -357,7 +357,7 @@ export default function DependencyGraph({
 
                   {/* Status reason */}
                   {selectedNode.data.statusReason && (
-                    <p className="mt-2 text-xs text-slate-500 bg-slate-50 rounded px-2 py-1">
+                    <p className="mt-2 text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-700 rounded px-2 py-1">
                       {selectedNode.data.statusReason}
                     </p>
                   )}
