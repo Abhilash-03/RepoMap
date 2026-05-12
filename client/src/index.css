@@ -24,3 +24,25 @@ body {
   box-shadow: none;
   background: transparent;
 }
+
+/* Dark mode React Flow controls - needs to be here for proper cascade */
+html.dark .react-flow__controls {
+  background-color: #1e293b !important;
+}
+
+html.dark .react-flow__controls-button {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+html.dark .react-flow__controls-button:hover {
+  background-color: #334155 !important;
+}
+
+html.dark .react-flow__controls-button svg {
+  fill: #e2e8f0 !important;
+}
+
+html.dark .react-flow__controls-button svg path {
+  fill: #e2e8f0 !important;
+}

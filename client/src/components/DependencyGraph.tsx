@@ -376,8 +376,8 @@ export default function DependencyGraph({
 
             {/* Imports section */}
             {selectedDependency && selectedDependency.imports.length > 0 && (
-              <div className="mt-4 pt-3 border-t border-slate-200">
-                <div className="flex items-center gap-2 text-xs font-medium text-slate-700 mb-2">
+              <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700">
+                <div className="flex items-center gap-2 text-xs font-medium text-slate-700 dark:text-slate-300 mb-2">
                   <ArrowDownToLine className="h-3.5 w-3.5 text-blue-500" />
                   <span>Imports ({selectedDependency.imports.length} files)</span>
                 </div>
@@ -385,9 +385,9 @@ export default function DependencyGraph({
                   {selectedDependency.imports.map((importPath, idx) => (
                     <div
                       key={idx}
-                      className="flex items-center justify-between gap-2 text-xs bg-blue-50 rounded px-2 py-1.5 group hover:bg-blue-100 transition-colors"
+                      className="flex items-center justify-between gap-2 text-xs bg-blue-50 dark:bg-blue-900/30 rounded px-2 py-1.5 group hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors"
                     >
-                      <span className="font-mono text-blue-700 truncate">{importPath}</span>
+                      <span className="font-mono text-blue-700 dark:text-blue-300 truncate">{importPath}</span>
                       <Button
                         variant="ghost"
                         size="icon"
@@ -395,9 +395,9 @@ export default function DependencyGraph({
                         onClick={() => copyToClipboard(importPath)}
                       >
                         {copiedPath === importPath ? (
-                          <Check className="h-3 w-3 text-green-600" />
+                          <Check className="h-3 w-3 text-green-600 dark:text-green-400" />
                         ) : (
-                          <Copy className="h-3 w-3" />
+                          <Copy className="h-3 w-3 text-blue-600 dark:text-blue-400" />
                         )}
                       </Button>
                     </div>
@@ -408,8 +408,8 @@ export default function DependencyGraph({
 
             {/* Imported By section */}
             {selectedDependency && selectedDependency.importedBy.length > 0 && (
-              <div className="mt-4 pt-3 border-t border-slate-200">
-                <div className="flex items-center gap-2 text-xs font-medium text-slate-700 mb-2">
+              <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700">
+                <div className="flex items-center gap-2 text-xs font-medium text-slate-700 dark:text-slate-300 mb-2">
                   <ArrowUpFromLine className="h-3.5 w-3.5 text-emerald-500" />
                   <span>Imported By ({selectedDependency.importedBy.length} files)</span>
                 </div>
@@ -417,9 +417,9 @@ export default function DependencyGraph({
                   {selectedDependency.importedBy.map((importedByPath, idx) => (
                     <div
                       key={idx}
-                      className="flex items-center justify-between gap-2 text-xs bg-emerald-50 rounded px-2 py-1.5 group hover:bg-emerald-100 transition-colors"
+                      className="flex items-center justify-between gap-2 text-xs bg-emerald-50 dark:bg-emerald-900/30 rounded px-2 py-1.5 group hover:bg-emerald-100 dark:hover:bg-emerald-900/50 transition-colors"
                     >
-                      <span className="font-mono text-emerald-700 truncate">{importedByPath}</span>
+                      <span className="font-mono text-emerald-700 dark:text-emerald-300 truncate">{importedByPath}</span>
                       <Button
                         variant="ghost"
                         size="icon"
@@ -427,9 +427,9 @@ export default function DependencyGraph({
                         onClick={() => copyToClipboard(importedByPath)}
                       >
                         {copiedPath === importedByPath ? (
-                          <Check className="h-3 w-3 text-green-600" />
+                          <Check className="h-3 w-3 text-green-600 dark:text-green-400" />
                         ) : (
-                          <Copy className="h-3 w-3" />
+                          <Copy className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
                         )}
                       </Button>
                     </div>
@@ -442,8 +442,8 @@ export default function DependencyGraph({
             {selectedDependency && 
               selectedDependency.imports.length === 0 && 
               selectedDependency.importedBy.length === 0 && (
-              <div className="mt-4 pt-3 border-t border-slate-200">
-                <p className="text-xs text-slate-500 text-center py-2">
+              <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-700">
+                <p className="text-xs text-slate-500 dark:text-slate-400 text-center py-2">
                   This file has no direct import connections.
                 </p>
               </div>
