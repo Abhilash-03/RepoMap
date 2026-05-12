@@ -507,11 +507,11 @@ index.js              // At repository root
 
         {/* Supported Files */}
         <Section id="supported-files" title="Supported Files">
-          <p className="text-slate-600 mb-6">
+          <p className="text-slate-600 dark:text-slate-300 mb-6">
             RepoMap focuses on JavaScript and TypeScript ecosystems. Here's what gets analyzed:
           </p>
 
-          <h3 className="text-lg font-semibold text-slate-900 mt-8 mb-4">Supported Extensions</h3>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mt-8 mb-4">Supported Extensions</h3>
           <div className="flex flex-wrap gap-2 mb-6">
             {['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs'].map((ext) => (
               <Badge key={ext} variant="outline" className="text-sm px-3 py-1 font-mono">
@@ -520,8 +520,8 @@ index.js              // At repository root
             ))}
           </div>
 
-          <h3 className="text-lg font-semibold text-slate-900 mt-8 mb-4">Skipped Directories</h3>
-          <p className="text-slate-600 mb-4">These directories are automatically excluded from analysis:</p>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mt-8 mb-4">Skipped Directories</h3>
+          <p className="text-slate-600 dark:text-slate-300 mb-4">These directories are automatically excluded from analysis:</p>
           <div className="flex flex-wrap gap-2">
             {['node_modules', 'dist', 'build', '.git', 'coverage', 'vendor', '__pycache__', '.next', '.nuxt', 'out'].map((dir) => (
               <Badge key={dir} variant="secondary" className="text-sm px-3 py-1 font-mono">
@@ -533,41 +533,41 @@ index.js              // At repository root
 
         {/* Import Resolution */}
         <Section id="import-resolution" title="Import Resolution">
-          <p className="text-slate-600 mb-6">
+          <p className="text-slate-600 dark:text-slate-300 mb-6">
             RepoMap resolves import paths to actual files using multiple strategies:
           </p>
 
-          <h3 className="text-lg font-semibold text-slate-900 mt-8 mb-4">Resolution Strategies</h3>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mt-8 mb-4">Resolution Strategies</h3>
           
           <div className="space-y-6">
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold text-slate-900 mb-2">1. Exact Match</h4>
-              <p className="text-sm text-slate-600 mb-2">If the import path matches a file exactly, use it.</p>
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-800">
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2">1. Exact Match</h4>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mb-2">If the import path matches a file exactly, use it.</p>
               <CodeBlock code={`import './utils.ts'  →  ./utils.ts`} />
             </div>
 
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold text-slate-900 mb-2">2. TypeScript ESM (.js → .ts)</h4>
-              <p className="text-sm text-slate-600 mb-2">For TypeScript ESM projects that use .js extensions in imports:</p>
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-800">
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2">2. TypeScript ESM (.js → .ts)</h4>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mb-2">For TypeScript ESM projects that use .js extensions in imports:</p>
               <CodeBlock code={`import './utils.js'  →  ./utils.ts
 import './component.jsx'  →  ./component.tsx`} />
             </div>
 
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold text-slate-900 mb-2">3. Extension Inference</h4>
-              <p className="text-sm text-slate-600 mb-2">If no extension, try common JS/TS extensions:</p>
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-800">
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2">3. Extension Inference</h4>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mb-2">If no extension, try common JS/TS extensions:</p>
               <CodeBlock code={`import './utils'  →  ./utils.ts, ./utils.tsx, ./utils.js, ./utils.jsx`} />
             </div>
 
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold text-slate-900 mb-2">4. Index Resolution</h4>
-              <p className="text-sm text-slate-600 mb-2">If path is a directory, look for index file:</p>
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-800">
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2">4. Index Resolution</h4>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mb-2">If path is a directory, look for index file:</p>
               <CodeBlock code={`import './components'  →  ./components/index.ts`} />
             </div>
 
-            <div className="border rounded-lg p-4">
-              <h4 className="font-semibold text-slate-900 mb-2">5. Path Alias Resolution</h4>
-              <p className="text-sm text-slate-600 mb-2">Handles @/, ~/, #/ aliases by finding the src folder:</p>
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-800">
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2">5. Path Alias Resolution</h4>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mb-2">Handles @/, ~/, #/ aliases by finding the src folder:</p>
               <CodeBlock code={`// File: client/src/pages/Home.tsx
 import '@/components/Button'  →  client/src/components/Button.tsx
 
@@ -579,39 +579,39 @@ import '@/utils'  →  packages/web/src/utils/index.ts`} />
 
         {/* Config Files */}
         <Section id="config-files" title="Config Files">
-          <p className="text-slate-600 mb-6">
+          <p className="text-slate-600 dark:text-slate-300 mb-6">
             Configuration files are loaded by build tools and frameworks, not imported directly. RepoMap recognizes them to avoid false orphan positives.
           </p>
 
-          <h3 className="text-lg font-semibold text-slate-900 mt-8 mb-4">Generic Patterns</h3>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mt-8 mb-4">Generic Patterns</h3>
           <div className="overflow-x-auto">
-            <table className="w-full text-sm border rounded-lg">
-              <thead className="bg-slate-50">
+            <table className="w-full text-sm border border-slate-200 dark:border-slate-700 rounded-lg">
+              <thead className="bg-slate-50 dark:bg-slate-800">
                 <tr>
-                  <th className="text-left p-3 border-b">Pattern</th>
-                  <th className="text-left p-3 border-b">Examples</th>
+                  <th className="text-left p-3 border-b border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white">Pattern</th>
+                  <th className="text-left p-3 border-b border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white">Examples</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="bg-white dark:bg-slate-800">
                 <tr>
-                  <td className="p-3 border-b font-mono text-violet-600">*.config.*</td>
-                  <td className="p-3 border-b text-slate-600">vite.config.ts, postcss.config.cjs, jest.config.mjs</td>
+                  <td className="p-3 border-b border-slate-200 dark:border-slate-700 font-mono text-violet-600 dark:text-violet-400">*.config.*</td>
+                  <td className="p-3 border-b border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300">vite.config.ts, postcss.config.cjs, jest.config.mjs</td>
                 </tr>
                 <tr>
-                  <td className="p-3 border-b font-mono text-violet-600">.*rc / .*rc.*</td>
-                  <td className="p-3 border-b text-slate-600">.eslintrc, .prettierrc.json, .babelrc.cjs</td>
+                  <td className="p-3 border-b border-slate-200 dark:border-slate-700 font-mono text-violet-600 dark:text-violet-400">.*rc / .*rc.*</td>
+                  <td className="p-3 border-b border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300">.eslintrc, .prettierrc.json, .babelrc.cjs</td>
                 </tr>
                 <tr>
-                  <td className="p-3 border-b font-mono text-violet-600">[tj]sconfig*.json</td>
-                  <td className="p-3 border-b text-slate-600">tsconfig.json, jsconfig.json, tsconfig.build.json</td>
+                  <td className="p-3 border-b border-slate-200 dark:border-slate-700 font-mono text-violet-600 dark:text-violet-400">[tj]sconfig*.json</td>
+                  <td className="p-3 border-b border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300">tsconfig.json, jsconfig.json, tsconfig.build.json</td>
                 </tr>
                 <tr>
-                  <td className="p-3 border-b font-mono text-violet-600">.env*</td>
-                  <td className="p-3 border-b text-slate-600">.env, .env.local, .env.production</td>
+                  <td className="p-3 border-b border-slate-200 dark:border-slate-700 font-mono text-violet-600 dark:text-violet-400">.env*</td>
+                  <td className="p-3 border-b border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300">.env, .env.local, .env.production</td>
                 </tr>
                 <tr>
-                  <td className="p-3 font-mono text-violet-600">Dotfiles</td>
-                  <td className="p-3 text-slate-600">.gitignore, .npmrc, .nvmrc, .dockerignore</td>
+                  <td className="p-3 font-mono text-violet-600 dark:text-violet-400">Dotfiles</td>
+                  <td className="p-3 text-slate-600 dark:text-slate-300">.gitignore, .npmrc, .nvmrc, .dockerignore</td>
                 </tr>
               </tbody>
             </table>
@@ -624,56 +624,56 @@ import '@/utils'  →  packages/web/src/utils/index.ts`} />
 
         {/* Special Cases */}
         <Section id="special-cases" title="Special Cases">
-          <p className="text-slate-600 mb-6">
+          <p className="text-slate-600 dark:text-slate-300 mb-6">
             Several file types receive special handling to avoid false positives:
           </p>
 
           <div className="space-y-4">
-            <div className="border rounded-lg p-4">
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-800">
               <div className="flex items-center gap-2 mb-2">
-                <Badge className="bg-blue-100 text-blue-700">Test Files</Badge>
+                <Badge className="bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300">Test Files</Badge>
               </div>
-              <p className="text-sm text-slate-600 mb-2">Files matching test patterns are run by test frameworks, not imported:</p>
-              <code className="text-xs bg-slate-100 px-2 py-1 rounded">*.test.ts, *.spec.ts, __tests__/*, test/*, tests/*</code>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mb-2">Files matching test patterns are run by test frameworks, not imported:</p>
+              <code className="text-xs bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 px-2 py-1 rounded">*.test.ts, *.spec.ts, __tests__/*, test/*, tests/*</code>
             </div>
 
-            <div className="border rounded-lg p-4">
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-800">
               <div className="flex items-center gap-2 mb-2">
-                <Badge className="bg-purple-100 text-purple-700">Type Definitions</Badge>
+                <Badge className="bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300">Type Definitions</Badge>
               </div>
-              <p className="text-sm text-slate-600 mb-2">TypeScript declaration files are used by the compiler:</p>
-              <code className="text-xs bg-slate-100 px-2 py-1 rounded">*.d.ts, types/*, @types/*</code>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mb-2">TypeScript declaration files are used by the compiler:</p>
+              <code className="text-xs bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 px-2 py-1 rounded">*.d.ts, types/*, @types/*</code>
             </div>
 
-            <div className="border rounded-lg p-4">
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-800">
               <div className="flex items-center gap-2 mb-2">
-                <Badge className="bg-pink-100 text-pink-700">Storybook</Badge>
+                <Badge className="bg-pink-100 dark:bg-pink-900/50 text-pink-700 dark:text-pink-300">Storybook</Badge>
               </div>
-              <p className="text-sm text-slate-600 mb-2">Story files are loaded by Storybook's dev server:</p>
-              <code className="text-xs bg-slate-100 px-2 py-1 rounded">*.stories.tsx, .storybook/*</code>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mb-2">Story files are loaded by Storybook's dev server:</p>
+              <code className="text-xs bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 px-2 py-1 rounded">*.stories.tsx, .storybook/*</code>
             </div>
 
-            <div className="border rounded-lg p-4">
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-800">
               <div className="flex items-center gap-2 mb-2">
-                <Badge className="bg-amber-100 text-amber-700">Workers</Badge>
+                <Badge className="bg-amber-100 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300">Workers</Badge>
               </div>
-              <p className="text-sm text-slate-600 mb-2">Web workers and service workers are loaded at runtime:</p>
-              <code className="text-xs bg-slate-100 px-2 py-1 rounded">*worker.ts, sw.ts, service-worker.ts</code>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mb-2">Web workers and service workers are loaded at runtime:</p>
+              <code className="text-xs bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 px-2 py-1 rounded">*worker.ts, sw.ts, service-worker.ts</code>
             </div>
 
-            <div className="border rounded-lg p-4">
+            <div className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-white dark:bg-slate-800">
               <div className="flex items-center gap-2 mb-2">
-                <Badge className="bg-emerald-100 text-emerald-700">Static Assets</Badge>
+                <Badge className="bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300">Static Assets</Badge>
               </div>
-              <p className="text-sm text-slate-600 mb-2">Files in static directories are served via HTML:</p>
-              <code className="text-xs bg-slate-100 px-2 py-1 rounded">public/*, static/*, assets/*</code>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mb-2">Files in static directories are served via HTML:</p>
+              <code className="text-xs bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-200 px-2 py-1 rounded">public/*, static/*, assets/*</code>
             </div>
           </div>
         </Section>
 
         {/* Architecture */}
         <Section id="architecture" title="Architecture">
-          <p className="text-slate-600 mb-6">
+          <p className="text-slate-600 dark:text-slate-300 mb-6">
             RepoMap consists of a React frontend and Node.js/Express backend:
           </p>
 
@@ -694,22 +694,22 @@ import '@/utils'  →  packages/web/src/utils/index.ts`} />
             ├── analyzer.ts     # Dependency Analyzer
             └── graphBuilder.ts # Graph Construction`} language="text" />
 
-          <h3 className="text-lg font-semibold text-slate-900 mt-8 mb-4">Data Flow</h3>
-          <div className="bg-slate-50 rounded-lg p-6 my-4">
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mt-8 mb-4">Data Flow</h3>
+          <div className="bg-slate-50 dark:bg-slate-800 rounded-lg p-6 my-4">
             <div className="flex flex-wrap items-center justify-center gap-2 text-sm">
-              <span className="px-3 py-1 bg-white rounded border">User Input</span>
+              <span className="px-3 py-1 bg-white dark:bg-slate-700 text-slate-900 dark:text-white rounded border border-slate-200 dark:border-slate-600">User Input</span>
               <ArrowRight className="h-4 w-4 text-slate-400" />
-              <span className="px-3 py-1 bg-violet-100 rounded border border-violet-200">GitHub API</span>
+              <span className="px-3 py-1 bg-violet-100 dark:bg-violet-900/50 text-violet-800 dark:text-violet-300 rounded border border-violet-200 dark:border-violet-700">GitHub API</span>
               <ArrowRight className="h-4 w-4 text-slate-400" />
-              <span className="px-3 py-1 bg-violet-100 rounded border border-violet-200">Analyzer</span>
+              <span className="px-3 py-1 bg-violet-100 dark:bg-violet-900/50 text-violet-800 dark:text-violet-300 rounded border border-violet-200 dark:border-violet-700">Analyzer</span>
               <ArrowRight className="h-4 w-4 text-slate-400" />
-              <span className="px-3 py-1 bg-violet-100 rounded border border-violet-200">Graph Builder</span>
+              <span className="px-3 py-1 bg-violet-100 dark:bg-violet-900/50 text-violet-800 dark:text-violet-300 rounded border border-violet-200 dark:border-violet-700">Graph Builder</span>
               <ArrowRight className="h-4 w-4 text-slate-400" />
-              <span className="px-3 py-1 bg-white rounded border">React Flow</span>
+              <span className="px-3 py-1 bg-white dark:bg-slate-700 text-slate-900 dark:text-white rounded border border-slate-200 dark:border-slate-600">React Flow</span>
             </div>
           </div>
 
-          <h3 className="text-lg font-semibold text-slate-900 mt-8 mb-4">Key Technologies</h3>
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mt-8 mb-4">Key Technologies</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               { name: 'React 19', desc: 'UI Framework' },
@@ -721,9 +721,9 @@ import '@/utils'  →  packages/web/src/utils/index.ts`} />
               { name: 'Express', desc: 'API Server' },
               { name: 'Octokit', desc: 'GitHub Client' },
             ].map((tech) => (
-              <div key={tech.name} className="text-center p-3 border rounded-lg">
-                <div className="font-semibold text-slate-900">{tech.name}</div>
-                <div className="text-xs text-slate-500">{tech.desc}</div>
+              <div key={tech.name} className="text-center p-3 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800">
+                <div className="font-semibold text-slate-900 dark:text-white">{tech.name}</div>
+                <div className="text-xs text-slate-500 dark:text-slate-400">{tech.desc}</div>
               </div>
             ))}
           </div>
@@ -731,23 +731,23 @@ import '@/utils'  →  packages/web/src/utils/index.ts`} />
 
         {/* API Reference */}
         <Section id="api-reference" title="API Reference">
-          <p className="text-slate-600 mb-6">
+          <p className="text-slate-600 dark:text-slate-300 mb-6">
             The backend exposes the following REST API endpoints:
           </p>
 
-          <div className="border rounded-lg overflow-hidden">
+          <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden">
             <div className="bg-slate-800 text-white p-4 flex items-center gap-3">
               <Badge className="bg-emerald-500">POST</Badge>
               <code className="font-mono">/api/analyze</code>
             </div>
-            <div className="p-4">
-              <h4 className="font-semibold text-slate-900 mb-2">Request Body</h4>
+            <div className="p-4 bg-white dark:bg-slate-800">
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2">Request Body</h4>
               <CodeBlock code={`{
   "repoUrl": "https://github.com/owner/repo",
   "token": "ghp_xxxx"  // Optional: GitHub personal access token
 }`} language="json" />
 
-              <h4 className="font-semibold text-slate-900 mb-2 mt-6">Response</h4>
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2 mt-6">Response</h4>
               <CodeBlock code={`{
   "repoInfo": {
     "owner": "facebook",
@@ -779,19 +779,19 @@ import '@/utils'  →  packages/web/src/utils/index.ts`} />
             </div>
           </div>
 
-          <div className="border rounded-lg overflow-hidden mt-6">
+          <div className="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden mt-6">
             <div className="bg-slate-800 text-white p-4 flex items-center gap-3">
               <Badge className="bg-blue-500">GET</Badge>
               <code className="font-mono">/api/rate-limit</code>
             </div>
-            <div className="p-4">
-              <h4 className="font-semibold text-slate-900 mb-2">Description</h4>
-              <p className="text-sm text-slate-600 mb-4">Check your current GitHub API rate limit status. Useful for monitoring remaining requests.</p>
+            <div className="p-4 bg-white dark:bg-slate-800">
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2">Description</h4>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mb-4">Check your current GitHub API rate limit status. Useful for monitoring remaining requests.</p>
 
-              <h4 className="font-semibold text-slate-900 mb-2">Headers (Optional)</h4>
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2">Headers (Optional)</h4>
               <CodeBlock code={`x-github-token: ghp_xxxx  // Your GitHub token for authenticated limits`} language="text" />
 
-              <h4 className="font-semibold text-slate-900 mb-2 mt-4">Response</h4>
+              <h4 className="font-semibold text-slate-900 dark:text-white mb-2 mt-4">Response</h4>
               <CodeBlock code={`{
   "limit": 5000,      // 60 without token, 5000 with token
   "remaining": 4990,  // Requests remaining
@@ -804,46 +804,46 @@ import '@/utils'  →  packages/web/src/utils/index.ts`} />
 
         {/* Limitations */}
         <Section id="limitations" title="Limitations">
-          <p className="text-slate-600 mb-6">
+          <p className="text-slate-600 dark:text-slate-300 mb-6">
             While RepoMap handles most common cases, there are some known limitations:
           </p>
 
           <div className="space-y-4">
-            <div className="border border-amber-200 bg-amber-50 rounded-lg p-4">
-              <h4 className="font-semibold text-amber-800 mb-2">Dynamic Imports with Variables</h4>
-              <p className="text-sm text-amber-700">
+            <div className="border border-amber-200 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/30 rounded-lg p-4">
+              <h4 className="font-semibold text-amber-800 dark:text-amber-300 mb-2">Dynamic Imports with Variables</h4>
+              <p className="text-sm text-amber-700 dark:text-amber-400">
                 Imports using variables cannot be statically analyzed:
               </p>
               <CodeBlock code={`const module = await import(\`./\${moduleName}\`); // Not detected`} />
             </div>
 
-            <div className="border border-amber-200 bg-amber-50 rounded-lg p-4">
-              <h4 className="font-semibold text-amber-800 mb-2">Non-Standard Path Aliases</h4>
-              <p className="text-sm text-amber-700">
+            <div className="border border-amber-200 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/30 rounded-lg p-4">
+              <h4 className="font-semibold text-amber-800 dark:text-amber-300 mb-2">Non-Standard Path Aliases</h4>
+              <p className="text-sm text-amber-700 dark:text-amber-400">
                 Custom path aliases beyond @/, ~/, #/ require manual configuration (not yet supported).
               </p>
             </div>
 
-            <div className="border border-amber-200 bg-amber-50 rounded-lg p-4">
-              <h4 className="font-semibold text-amber-800 mb-2">Private Repositories</h4>
-              <p className="text-sm text-amber-700">
+            <div className="border border-amber-200 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/30 rounded-lg p-4">
+              <h4 className="font-semibold text-amber-800 dark:text-amber-300 mb-2">Private Repositories</h4>
+              <p className="text-sm text-amber-700 dark:text-amber-400">
                 Private repos require a GitHub token with appropriate permissions.
               </p>
             </div>
 
-            <div className="border border-amber-200 bg-amber-50 rounded-lg p-4">
-              <h4 className="font-semibold text-amber-800 mb-2">Large Repositories</h4>
-              <p className="text-sm text-amber-700 mb-2">
+            <div className="border border-amber-200 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/30 rounded-lg p-4">
+              <h4 className="font-semibold text-amber-800 dark:text-amber-300 mb-2">Large Repositories</h4>
+              <p className="text-sm text-amber-700 dark:text-amber-400 mb-2">
                 Very large repos (500+ files) may hit API rate limits or timeout. Try smaller repos like:
               </p>
-              <code className="text-xs bg-amber-100 px-2 py-1 rounded block">
+              <code className="text-xs bg-amber-100 dark:bg-amber-800/50 text-amber-800 dark:text-amber-200 px-2 py-1 rounded block">
                 pmndrs/zustand, pacocoursey/cmdk, lukeed/clsx, ai/nanoid
               </code>
             </div>
 
-            <div className="border border-amber-200 bg-amber-50 rounded-lg p-4">
-              <h4 className="font-semibold text-amber-800 mb-2">Other Languages</h4>
-              <p className="text-sm text-amber-700">
+            <div className="border border-amber-200 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/30 rounded-lg p-4">
+              <h4 className="font-semibold text-amber-800 dark:text-amber-300 mb-2">Other Languages</h4>
+              <p className="text-sm text-amber-700 dark:text-amber-400">
                 Currently only JavaScript/TypeScript are supported. Python, Go, Rust, etc. are not analyzed.
               </p>
             </div>
@@ -855,7 +855,7 @@ import '@/utils'  →  packages/web/src/utils/index.ts`} />
         </Section>
 
         {/* Footer */}
-        <div className="mt-16 pt-8 border-t text-center text-slate-500 text-sm">
+        <div className="mt-16 pt-8 border-t border-slate-200 dark:border-slate-700 text-center text-slate-500 dark:text-slate-400 text-sm">
           <p>Built with ❤️ for developers who love clean code</p>
           <p className="mt-2">
             <a href="https://github.com/Abhilash-03/RepoMap" className="text-violet-600 hover:underline">
